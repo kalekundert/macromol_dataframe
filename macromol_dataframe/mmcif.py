@@ -1,4 +1,5 @@
 import polars as pl
+import polars.selectors as cs
 import numpy as np
 import gemmi.cif
 
@@ -55,6 +56,9 @@ def write_mmcif(out_path: Path, atoms: pl.DataFrame, name: str = None):
                     pl.col('chain_id'),
                     pl.col('symmetry_mate') + 1,
                 )
+            )
+            .with_columns(
+                cs.float().round(3),
             )
             .with_columns(
                 pl.col('*').cast(str).replace(None, '?')

@@ -62,5 +62,16 @@ Check this output manually.  If it looks good, copy it to:
 {ref_path}
 """)
 
-    assert ref_path.read_text() == out_path.read_text()
+    # If the two files aren't the same, pytest takes forever to calculate a 
+    # diff, so we go out of our way to avoid that.
+    if ref_path.read_text() != out_path.read_text():
+        pytest.fail(f"""\
+The current mmCIF output doesn't match the reference output.
+
+Output from this test run was written to:
+{out_path}
+
+Check this output manually.  If it looks good, copy it to:
+{ref_path}
+""")
 
