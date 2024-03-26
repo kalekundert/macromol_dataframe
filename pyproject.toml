@@ -14,12 +14,17 @@ classifiers = [
   'Programming Language :: Python :: 3',
 ]
 dependencies = [
+    'gemmi',
+    'numpy',
+    'polars',
+    'scipy',
 ]
 
 [project.optional-dependencies]
 test = [
   'pytest',
   'parametrize_from_file',
+  'hypothesis',
 ]
 doc = [
   'sphinx',
