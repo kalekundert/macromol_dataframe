@@ -1,4 +1,3 @@
-import sys, os
 import macromol_dataframe
 
 ## General
