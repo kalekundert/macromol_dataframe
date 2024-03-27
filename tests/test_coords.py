@@ -7,32 +7,10 @@ from pytest import approx
 from hypothesis import given, settings
 from hypothesis.extra.numpy import arrays
 from scipy.spatial.transform import Rotation
+from macromol_dataframe.testing import *
 from math import pi
 
 with_math = pff.Namespace('from math import *')
-
-def matrix(params):
-    io = StringIO(params)
-    return np.loadtxt(io, dtype=float)
-
-def vector(params):
-    return np.array([with_math.eval(x) for x in params.split()])
-
-def frame(params):
-    origin = coord(params['origin'])
-    rot_vec_rad = vector(params['rot_vec_rad'])
-    return mmdf.make_coord_frame(origin, rot_vec_rad)
-
-def frames(params):
-    return [frame(x) for x in params]
-
-def coord(params):
-    return matrix(params)
-
-def coords(params):
-    coords = matrix(params)
-    coords.shape = (1, *coords.shape)[-2:]
-    return coords
 
 def float_bounds(max=100):
     return dict(

@@ -4,98 +4,11 @@ import polars as pl
 import polars.testing
 import numpy as np
 
+from macromol_dataframe.testing import atoms_csv, atoms_fwf
 from test_coords import frame, coords
 from io import StringIO
 
 with_py = pff.Namespace()
-
-def atoms_fwf(params):
-    dtypes = {
-            'chain_id': str,
-            'subchain_id': str,
-            'seq_id': int,
-            'comp_id': str,
-            'atom_id': str,
-            'element': str,
-            'x': float,
-            'y': float,
-            'z': float,
-            'occupancy': float,
-            'b_factor': float,
-    }
-    col_aliases = {
-            'chain': 'chain_id',
-            'subchain': 'subchain_id',
-            'resn': 'comp_id',
-            'resi': 'seq_id',
-            'e': 'element',
-            'q': 'occupancy',
-            'b': 'b_factor',
-    }
-
-    io = StringIO(params)
-
-    # If there isn't a header row, assume that only the element and coordinate 
-    # columns were given.  The rest of the columns are given default values.
-    # 
-    # If there is a header row, create whichever columns it specifies.  Note 
-    # that the 'x', 'y', and 'z' columns are always required.
-
-    header = io.readline().split()
-    if {'x', 'y', 'z'} <= set(header):
-        pass
-    else:
-        header = ['e', 'x', 'y', 'z']
-        io.seek(0)
-
-    rows = []
-    for line in io.readlines():
-        rows.append(line.split())
-
-    df = (
-            pl.DataFrame(rows, header, orient='row')
-            .rename(lambda x: col_aliases.get(x, x))
-            .with_columns(
-                pl.col('*').replace(['.', '?'], None)
-            )
-            .cast({
-                col_aliases.get(k, k): dtypes.get(k, str)
-                for k in header
-            })
-    )
-
-    if 'comp_id' not in df.columns:
-        df = df.with_columns(comp_id=pl.lit('ALA'))
-    if 'element' not in df.columns:
-        df = df.with_columns(element=pl.lit('C'))
-    if 'occupancy' not in df.columns:
-        df = df.with_columns(occupancy=pl.lit(1.0))
-
-    return df
-
-def atoms_csv(csv):
-    return (
-            pl.read_csv(StringIO(csv))
-            .with_columns(
-                pl.col(pl.String).str.strip_chars()
-            )
-            .cast({
-                'symmetry_mate': pl.Int32,
-                'chain_id': str,
-                'subchain_id': str,
-                'alt_id': str,
-                'seq_id': int,
-                'comp_id': str,
-                'atom_id': str,
-                'element': str,
-                'x': float,
-                'y': float,
-                'z': float,
-                'occupancy': float,
-                'b_factor': float,
-            })
-    )
-
 
 @pff.parametrize(
         schema=pff.cast(
