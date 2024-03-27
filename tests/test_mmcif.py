@@ -6,7 +6,7 @@ import polars as pl
 import polars.testing
 import gemmi.cif
 
-from test_atoms import atoms_csv
+from macromol_dataframe.testing import atoms_csv
 from pathlib import Path
 
 with_pl = pff.Namespace('import polars as pl')
@@ -41,6 +41,20 @@ def test_read_mmcif(tmp_path, mmcif, model_id, assembly_id, expected, error):
                 check_exact=False,
                 check_column_order=False,
         )
+
+@pff.parametrize(
+        schema=pff.cast(expected=atoms_csv),
+)
+def test_read_mmcif_asymmetric_unit(tmp_path, mmcif, expected):
+    cif_path = tmp_path / 'mock.cif'
+    cif_path.write_text(mmcif)
+
+    atoms = mmdf.read_mmcif_asymmetric_unit(cif_path)
+    pl.testing.assert_frame_equal(
+            atoms, expected,
+            check_exact=False,
+            check_column_order=False,
+    )
 
 def test_write_mmcif(tmp_path):
     test_dir = Path(__file__).parent 

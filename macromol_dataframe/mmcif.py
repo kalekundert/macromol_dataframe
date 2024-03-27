@@ -27,6 +27,10 @@ def read_mmcif(in_path: Path, model_id: str, assembly_id: str):
                 assembly_id,
         )
 
+def read_mmcif_asymmetric_unit(in_path: Path):
+    cif = gemmi.cif.read(str(in_path)).sole_block()
+    return _extract_atom_site(cif)
+
 def write_mmcif(out_path: Path, atoms: pl.DataFrame, name: str = None):
     col_map = {
             'chain_id': 'auth_asym_id',
@@ -115,20 +119,23 @@ def _extract_dataframe(cif, key_prefix, schema):
         err.blame = [f"missing column(s): {missing_cols}"]
         raise err
 
-    # Fill in missing optional columns:
-    df = df.with_columns([
-        pl.lit(None, dtype=str).alias(v.name)
-        for v in schema.values()
-        if not v.required and v.name not in df.columns
-    ])
-
-    # Cast, rename, and sort desired columns:
     return (
             df
+
+            # Fill in missing optional columns:
+            .with_columns([
+                pl.lit(None, dtype=str).alias(v.name)
+                for v in schema.values()
+                if not v.required and v.name not in df.columns
+            ])
+
+            # Cast, rename, and sort desired columns:
             .select([
                 pl.col(v.name).cast(v.dtype).alias(k)
                 for k, v in schema.items()
             ])
+
+            # Remove all-null rows:
             .filter(~pl.all_horizontal(pl.all().is_null()))
     )
 

@@ -2,7 +2,6 @@ import numpy as np
 import macromol_dataframe as mmdf
 import parametrize_from_file as pff
 
-from io import StringIO
 from pytest import approx
 from hypothesis import given, settings
 from hypothesis.extra.numpy import arrays

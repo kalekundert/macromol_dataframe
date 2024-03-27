@@ -4,9 +4,8 @@ import polars as pl
 import polars.testing
 import numpy as np
 
-from macromol_dataframe.testing import atoms_csv, atoms_fwf
+from macromol_dataframe.testing import atoms_fwf
 from test_coords import frame, coords
-from io import StringIO
 
 with_py = pff.Namespace()
 

@@ -93,26 +93,28 @@ def atoms_fwf(params):
     return df
 
 def atoms_csv(params):
+    dtypes = {
+            'symmetry_mate': pl.Int32,
+            'chain_id': str,
+            'subchain_id': str,
+            'alt_id': str,
+            'seq_id': int,
+            'comp_id': str,
+            'atom_id': str,
+            'element': str,
+            'x': float,
+            'y': float,
+            'z': float,
+            'occupancy': float,
+            'b_factor': float,
+    }
+    df = pl.read_csv(StringIO(params))
     return (
-            pl.read_csv(StringIO(params))
+            df
             .with_columns(
                 pl.col(pl.String).str.strip_chars()
             )
-            .cast({
-                'symmetry_mate': pl.Int32,
-                'chain_id': str,
-                'subchain_id': str,
-                'alt_id': str,
-                'seq_id': int,
-                'comp_id': str,
-                'atom_id': str,
-                'element': str,
-                'x': float,
-                'y': float,
-                'z': float,
-                'occupancy': float,
-                'b_factor': float,
-            })
+            .cast({k: dtypes.get(k, str) for k in df.columns})
     )
 
 
