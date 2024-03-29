@@ -3,7 +3,11 @@ import numpy as np
 import math
 
 from .coords import make_coord_frame
+from .error import TidyError
 from io import StringIO
+from functools import partial
+
+NOT_GIVEN = object()
 
 def matrix(params):
     io = StringIO(params)
@@ -29,68 +33,33 @@ def coords(params):
     return coords
 
 def atoms_fwf(params):
-    dtypes = {
-            'chain_id': str,
-            'subchain_id': str,
-            'seq_id': int,
-            'comp_id': str,
-            'atom_id': str,
-            'element': str,
-            'x': float,
-            'y': float,
-            'z': float,
-            'occupancy': float,
-            'b_factor': float,
-    }
-    col_aliases = {
-            'chain': 'chain_id',
-            'subchain': 'subchain_id',
-            'resn': 'comp_id',
-            'resi': 'seq_id',
-            'e': 'element',
-            'q': 'occupancy',
-            'b': 'b_factor',
-    }
-
-    io = StringIO(params)
-
-    # If there isn't a header row, assume that only the element and coordinate 
-    # columns were given.  The rest of the columns are given default values.
-    # 
-    # If there is a header row, create whichever columns it specifies.  Note 
-    # that the 'x', 'y', and 'z' columns are always required.
-
-    header = io.readline().split()
-    if {'x', 'y', 'z'} <= set(header):
-        pass
-    else:
-        header = ['e', 'x', 'y', 'z']
-        io.seek(0)
-
-    rows = []
-    for line in io.readlines():
-        rows.append(line.split())
-
-    df = (
-            pl.DataFrame(rows, header, orient='row')
-            .rename(lambda x: col_aliases.get(x, x))
-            .with_columns(
-                pl.col('*').replace(['.', '?'], None)
-            )
-            .cast({
-                col_aliases.get(k, k): dtypes.get(k, str)
-                for k in header
-            })
+    return dataframe(
+            params,
+            dtypes={
+                'seq_id': int,
+                'x': float,
+                'y': float,
+                'z': float,
+                'occupancy': float,
+                'b_factor': float,
+            },
+            col_aliases={
+                'chain': 'chain_id',
+                'subchain': 'subchain_id',
+                'resn': 'comp_id',
+                'resi': 'seq_id',
+                'e': 'element',
+                'q': 'occupancy',
+                'b': 'b_factor',
+            },
+            default_cols={
+                'comp_id': 'ALA',
+                'element': 'C',
+                'occupancy': 1.0,
+            },
+            default_header=['e', 'x', 'y', 'z'],
+            required_cols=['x', 'y', 'z'],
     )
-
-    if 'comp_id' not in df.columns:
-        df = df.with_columns(comp_id=pl.lit('ALA'))
-    if 'element' not in df.columns:
-        df = df.with_columns(element=pl.lit('C'))
-    if 'occupancy' not in df.columns:
-        df = df.with_columns(occupancy=pl.lit(1.0))
-
-    return df
 
 def atoms_csv(params):
     dtypes = {
@@ -117,4 +86,133 @@ def atoms_csv(params):
             .cast({k: dtypes.get(k, str) for k in df.columns})
     )
 
+def dataframe(
+        params=NOT_GIVEN,
+        *,
+        exprs={},
+        dtypes={},
+        col_aliases={},
+        default_header=[],
+        default_cols={},
+        required_cols=[],
+):
+    """
+    Instantiate a data frame from a string containing a fixed-width formatted 
+    table.
 
+    Arguments:
+        exprs:
+            A dictionary mapping column names (aliases ok) to polars 
+            expressions.  These expressions provide the means to parse more 
+            complicated field values.  Only those expressions corresponding to 
+            columns in the table will be used; the rest will be silently 
+            ignored.  Expressions are applied before data types (see the 
+            *dtypes* argument below), and it is allowed to specify both for the 
+            same column.
+
+        dtypes:
+            A dictionary mapping column names (aliases ok) to data types.  The 
+            string values parsed from the data will be converted to these 
+            types.  Any columns not included in this mapping will be left as 
+            strings.
+
+        col_aliases:
+            A dictionary mapping "input" column names to "output" column names.  
+            Because the data frames used in test cases are typed by hand, it is 
+            often convenient to allow shorthand column headers.  However, the 
+            output column names must match those expected by the APIs being 
+            tested, which are typically more verbose.
+
+        default_header:
+            A list of strings giving the names to use for each column (aliases 
+            ok), if no column names are specified.  Column names are considered 
+            to be specified if the first row of the table contains all of the 
+            required column names, or all of the default column names if 
+            *required_cols* isn't specified.
+
+        default_cols:
+            A dictionary mapping column names (aliases ok) to default values.  
+            If any of these columns are not present in the table, they will be 
+            added to the dataframe with the associated value in every row.  
+            Note that the default columns are added before the *dtypes* are 
+            evaluated.  This means that even if you specify a default value of 
+            the wrong type (e.g. null, int instead of float, etc.), the column 
+            will still end up with the correct data type.
+
+        required_cols:
+            A list of column names (aliases ok) that must be present in the 
+            output dataframe.  If a required column is missing, and exception 
+            will be raised.
+    """
+
+    if params is NOT_GIVEN:
+        kwargs = locals()
+        del kwargs['params']
+        return partial(dataframe, **kwargs)
+
+    rows = [line.split() for line in params.splitlines()]
+    header, body = rows[0], rows[1:]
+
+    def resolve_aliases_dict(d):
+        return {
+                col_aliases.get(k, k): v
+                for k, v in d.items()
+        }
+
+    def resolve_aliases_list(l):
+        return [col_aliases.get(k, k) for k in l]
+
+    exprs = resolve_aliases_dict(exprs)
+    dtypes = resolve_aliases_dict(dtypes)
+    default_header = resolve_aliases_list(default_header)
+    default_cols = resolve_aliases_dict({
+        k: pl.lit(v)
+        for k, v in default_cols.items()
+    })
+    required_cols = resolve_aliases_list(required_cols)
+    header = resolve_aliases_list(header)
+
+    if default_header:
+        if set(required_cols or default_header) - set(header):
+            header = default_header
+            body = rows
+
+    for row in body:
+        if len(row) != len(header):
+            raise InputError(
+                    "rows must have same number of column as header",
+                    info=[f"header: {header!r}"],
+                    blame=[f"offending row: {row!r}"],
+            )
+
+    def drop_missing_cols(d):
+        return {k: v for k, v in d.items() if k in header}
+
+    def drop_existing_cols(d):
+        return {k: v for k, v in d.items() if k not in header}
+
+    schema = {k: str for k in header}
+    df = (
+            pl.DataFrame(body, schema, orient='row')
+    )
+    df = (
+            df
+            .with_columns(
+                pl.col('*').replace(['.', '?'], None)
+            )
+            .with_columns(**drop_missing_cols(exprs))
+            .with_columns(**drop_existing_cols(default_cols))
+            .cast(drop_missing_cols(dtypes))
+    )
+
+    if set(required_cols) - set(df.columns):
+        raise InputError(
+                "missing required columns",
+                info=[f"required columns: {required_cols!r}"],
+                blame=[f"specified columns: {df.columns!r}"],
+        )
+
+    return df
+
+class InputError(TidyError):
+    pass
