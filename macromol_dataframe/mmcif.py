@@ -2,6 +2,7 @@ import polars as pl
 import polars.selectors as cs
 import numpy as np
 import gemmi.cif
+import re
 
 from .atoms import Atoms, transform_atom_coords
 from .coords import Frame
@@ -438,7 +439,7 @@ def _parse_oper_expression(expr: str, oper_map: dict[str, Frame]):
     # I didn't take the time to implement it.  But this is something I might 
     # have to come back to later on.
 
-    if '(' in expr:
+    if not re.fullmatch(r'[a-zA-Z0-9,]+', expr):
         err = MmcifError("unsupported expression")
         err.info = [
                 "parenthetical expressions in biological assembly transformations are not currently supported",

@@ -57,7 +57,13 @@ def test_extract_dataframe(mmcif, prefix, schema, expected, error):
                 oper_map=oper_map,
                 entities=entities,
             ),
-            with_mmdf.error_or('expected'),
+            with_mmdf.error_or(
+                'pdb_id',
+                'asym_atoms',
+                'assembly_gen',
+                'oper_map',
+                'entities',
+            ),
         ],
 )
 def test_read_mmcif(
@@ -76,6 +82,8 @@ def test_read_mmcif(
     with error:
         struct = mmdf.read_mmcif(cif_path)
 
+    if not error:
+        assert repr(struct) == f'<Structure {struct.id}>'
         assert struct.id == pdb_id
         pl.testing.assert_frame_equal(
                 struct.asym_atoms, asym_atoms,
