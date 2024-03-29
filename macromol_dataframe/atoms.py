@@ -26,7 +26,7 @@ def prune_hydrogen(atoms):
       The latter is easier and doesn't involve adding data that's not in the 
       actual dataset.
     """
-    return atoms.filter(pl.col('element').is_in(['H', 'D']))
+    return atoms.filter(~pl.col('element').is_in(['H', 'D']))
 
 def prune_water(atoms):
     """
@@ -44,7 +44,7 @@ def prune_water(atoms):
       highly-structured waters can still be inferred from the macromolecule 
       itself.
     """
-    return atoms.filter(pl.col('comp_id').is_in(['HOH', 'DOD']))
+    return atoms.filter(~pl.col('comp_id').is_in(['HOH', 'DOD']))
 
 
 def get_atom_coords(

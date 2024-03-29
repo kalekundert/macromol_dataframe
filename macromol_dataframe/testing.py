@@ -48,6 +48,8 @@ def atoms_fwf(params):
                 'subchain': 'subchain_id',
                 'resn': 'comp_id',
                 'resi': 'seq_id',
+                'atom': 'atom_id',
+                'elem': 'element',
                 'e': 'element',
                 'q': 'occupancy',
                 'b': 'b_factor',

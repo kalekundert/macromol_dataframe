@@ -42,5 +42,23 @@ def test_transform_atom_coords(atoms_x, frame_xy, expected_y):
     atoms_y = mmdf.transform_atom_coords(atoms_x, frame_xy)
     pl.testing.assert_frame_equal(atoms_y, expected_y)
 
+@pff.parametrize(
+        schema=pff.cast(
+            atoms=atoms_fwf,
+            expected=atoms_fwf,
+        ),
+)
+def test_prune_hydrogen(atoms, expected):
+    actual = mmdf.prune_hydrogen(atoms)
+    pl.testing.assert_frame_equal(actual, expected)
 
+@pff.parametrize(
+        schema=pff.cast(
+            atoms=atoms_fwf,
+            expected=atoms_fwf,
+        ),
+)
+def test_prune_water(atoms, expected):
+    actual = mmdf.prune_water(atoms)
+    pl.testing.assert_frame_equal(actual, expected)
 
