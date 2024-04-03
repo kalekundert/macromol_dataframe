@@ -269,6 +269,9 @@ def make_biological_assembly(
 
     return pl.concat(bio_atoms).rechunk()
 
+def get_pdb_path(pdb_dir: Path | str, pdb_id: str, suffix: str = '.cif.gz'):
+    return Path(pdb_dir) / pdb_id[1:3] / (pdb_id + suffix)
+
 @contextmanager
 def _add_path_to_mmcif_error(path: Path):
     try:

@@ -174,3 +174,6 @@ Check this output manually.  If it looks good, copy it to:
 {ref_path}
 """)
 
+def test_get_pdb_path():
+    assert mmdf.get_pdb_path('dir', '1abc') == Path('dir/ab/1abc.cif.gz')
+    assert mmdf.get_pdb_path('dir', '1abc', '.pdb') == Path('dir/ab/1abc.pdb')
