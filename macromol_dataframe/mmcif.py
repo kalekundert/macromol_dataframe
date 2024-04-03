@@ -332,24 +332,39 @@ def _extract_dataframe(cif, key_prefix, schema):
     )
 
 def _extract_atom_site(cif):
-    return _extract_dataframe(
-            cif, 'atom_site',
-            schema=dict(
-                model_id=Column('pdbx_PDB_model_num'), 
-                chain_id=Column('auth_asym_id'),
-                subchain_id=Column('label_asym_id'),
-                entity_id=Column('label_entity_id'),
-                alt_id=Column('label_alt_id'),
-                seq_id=Column('label_seq_id', dtype=int),
-                comp_id=Column('label_comp_id'),
-                atom_id=Column('label_atom_id'),
-                element=Column('type_symbol', required=True),
-                x=Column('Cartn_x', dtype=float, required=True),
-                y=Column('Cartn_y', dtype=float, required=True),
-                z=Column('Cartn_z', dtype=float, required=True),
-                occupancy=Column('occupancy', dtype=float),
-                b_factor=Column('B_iso_or_equiv', dtype=float),
-            ),
+    return (
+            _extract_dataframe(
+                cif, 'atom_site',
+                schema=dict(
+                    model_id=Column('pdbx_PDB_model_num'), 
+                    chain_id=Column('auth_asym_id'),
+                    subchain_id=Column('label_asym_id'),
+                    entity_id=Column('label_entity_id'),
+                    alt_id=Column('label_alt_id'),
+                    seq_id=Column('label_seq_id', dtype=int),
+                    comp_id=Column('label_comp_id'),
+                    atom_id=Column('label_atom_id'),
+                    element=Column('type_symbol', required=True),
+                    x=Column('Cartn_x', dtype=float, required=True),
+                    y=Column('Cartn_y', dtype=float, required=True),
+                    z=Column('Cartn_z', dtype=float, required=True),
+                    occupancy=Column('occupancy', dtype=float),
+                    b_factor=Column('B_iso_or_equiv', dtype=float),
+                ),
+            )
+            # Some structures (e.g. 1mno) have atoms with negative occupancies.  
+            # I'm not aware of any structures with occupancies greater than 1, 
+            # but if they exists, such values also wouldn't make any sense.  
+            #
+            # While there's some argument for leaving these nonsensical values 
+            # so the user can deal with them how they want, I think that most 
+            # users will simply not realize that this could be a problem at 
+            # all.  Clipping these values may not be exactly what the user 
+            # wants, but it will never be a crazy thing to do, and the 
+            # potential is has to avoid subtle bugs makes it worth it.
+            .with_columns(
+                pl.col('occupancy').clip(0, 1)
+            )
     )
 
 def _extract_struct_assembly_gen(cif, asym_atoms):
