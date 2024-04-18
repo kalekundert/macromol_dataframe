@@ -2,11 +2,16 @@ import polars as pl
 import polars.selectors as cs
 import numpy as np
 import gemmi.cif
-import re
+import functools
+import operator as op
 
 from .atoms import Atoms, transform_atom_coords
 from .coords import Frame
 from .error import TidyError
+from parsy import ParseError
+from functools import reduce
+from itertools import product
+from more_itertools import flatten
 from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -150,9 +155,9 @@ def write_mmcif(cif_path: Path, atoms: Atoms, name: str = None) -> None:
             - ``occupancy``
             - ``b_factor``
 
-            Any other columns will be ignored.  If present, the 
-            ``symmetry_mate`` column will be concatenated to the ``chain_id`` 
-            column to create a unique id for each symmetric copy of a chain.
+            If present, the ``symmetry_mate`` column will be concatenated to 
+            the ``chain_id`` column to create a unique id for each symmetric 
+            copy of a chain.  Any other columns will be ignored.
 
         name:
             An identifier to include in the mmCIF file.  By default, this is 
@@ -183,14 +188,23 @@ def write_mmcif(cif_path: Path, atoms: Atoms, name: str = None) -> None:
     # Give each chain a unique name, otherwise symmetry mates will appear to be 
     # duplicate atoms, and this can confuse downstream programs (e.g. pymol).
 
-    atoms_str = (
+    if 'symmetry_mate' in atoms.columns:
+        atoms = (
             atoms
             .with_columns(
-                pl.concat_str(
+                chain_id=pl.concat_str(
                     pl.col('chain_id'),
                     pl.col('symmetry_mate') + 1,
-                )
+                ),
+                subchain_id=pl.concat_str(
+                    pl.col('subchain_id'),
+                    pl.col('symmetry_mate') + 1,
+                ),
             )
+        )
+
+    atoms_str = (
+            atoms
             .with_columns(
                 cs.float().round(3),
             )
@@ -233,27 +247,27 @@ def make_biological_assembly(
         struct_oper_map: dict[str, Frame],
         assembly_id: str,
 ) -> Atoms:
-    oper_exprs = (
+    bio_opers = (
             struct_assembly_gen
             .filter(pl.col('assembly_id') == assembly_id)
     )
 
-    if oper_exprs.is_empty():
+    if bio_opers.is_empty():
         known_assemblies = \
                 struct_assembly_gen['assembly_id'].unique().to_list()
 
         err = MmcifError("can't find biological assembly")
-        err.info += [f"known assemblies: {known_assemblies}"]
+        err.info = [f"known assemblies: {known_assemblies}"]
         err.blame = [f"unknown assembly: {assembly_id!r}"]
         raise err
 
     bio_atoms = []
 
-    for row in oper_exprs.iter_rows(named=True):
+    for row in bio_opers.iter_rows(named=True):
         subchain_ids = row['subchain_ids']
-        frames = _parse_oper_expression(row['oper_expr'], struct_oper_map)
 
-        for i, frame in enumerate(frames):
+        for i, oper_ids in enumerate(row['oper_ids']):
+            frame = reduce(op.matmul, (struct_oper_map[x] for x in oper_ids))
             sym_atoms = (
                     transform_atom_coords(
                         asym_atoms.filter(
@@ -270,6 +284,10 @@ def make_biological_assembly(
     return pl.concat(bio_atoms).rechunk()
 
 def get_pdb_path(pdb_dir: Path | str, pdb_id: str, suffix: str = '.cif.gz'):
+    """
+    Return the path to a mmCIF file identified by a PDB id, assuming that the 
+    file is stored in a directory matching the structure of the PDB itself.
+    """
     return Path(pdb_dir) / pdb_id[1:3] / (pdb_id + suffix)
 
 @contextmanager
@@ -405,7 +423,7 @@ def _extract_struct_assembly_gen(cif, asym_atoms):
             dict(
                 assembly_id='1',
                 subchain_ids=asym_atoms['subchain_id'].unique(),
-                oper_expr='1',
+                oper_ids=[['1']],
             ),
         ])
 
@@ -425,13 +443,25 @@ def _extract_struct_assembly_gen(cif, asym_atoms):
                     schema=dict(
                         assembly_id=Column('assembly_id', required=True),
                         subchain_ids=Column('asym_id_list', required=True),
-                        oper_expr=Column('oper_expression', required=True),
+                        oper_ids=Column('oper_expression', required=True),
                     ),
                 )
                 .with_columns(
-                    pl.col('subchain_ids').str.split(',')
+                    pl.col('subchain_ids').str.split(','),
+                    pl.col('oper_ids').map_elements(
+                        _parse_oper_expression,
+                        return_dtype=pl.List(pl.List(str)),
+                    ),
                 )
         )
+
+        for row in struct_assembly_gen.iter_rows(named=True):
+            oper_ids = set(flatten(row['oper_ids']))
+            if unknown_oper_ids := oper_ids - set(struct_oper_map):
+                err = MmcifError("missing assembly operation")
+                err.info = [f"assembly: {row['assembly_id']}"]
+                err.blame = [f"operations referenced but not defined: {','.join(x for x in sorted(unknown_oper_ids))}"]
+                raise err
 
     return struct_assembly_gen, struct_oper_map
 
@@ -445,31 +475,65 @@ def _extract_entities(cif):
             ),
     )
 
-def _parse_oper_expression(expr: str, oper_map: dict[str, Frame]):
-    # According to the PDBx/mmCIF specification [1], it's possible for the 
-    # operation expression to contain parenthetical expressions.  This would 
-    # indicate that each transformation in one set of parentheses should be 
-    # combined separately with each transformation in the next.  It's also 
-    # possible for ranges of numbers to be specified with dashes.
+def _parse_oper_expression(expr: str):
+    parser = _make_oper_expression_parser()
+
+    try:
+        return parser.parse(expr)
+
+    except ParseError as err1:
+        err2 = MmcifError("failed to parse assembly operation expression")
+        err2.info = [f"expression: {expr}"]
+        err2.blame = [str(err1)]
+        raise err2
+
+@functools.cache
+def _make_oper_expression_parser():
+    from parsy import generate, string, regex
+
+    # This is more restrictive than the regular expression given by the 
+    # PDBx/mmCIF dictionary for `_pdbx_struct_oper_list.id` [1].  However, that 
+    # regular expression allows hyphens and commas, which would be ambiguous in 
+    # the context of these expressions.  Alpha-numeric identifiers are enough 
+    # for every structure in the PDB.
     #
-    # Handling the above cases would add a lot of complexity to this function.  
-    # For now, I haven't found any structures that use this advanced syntax, so 
-    # I didn't take the time to implement it.  But this is something I might 
-    # have to come back to later on.
+    # [1]: https://mmcif.wwpdb.org/dictionaries/mmcif_pdbx_v40.dic/Items/_pdbx_struct_oper_list.id.html
+    oper_id = regex(r'\w+').desc('oper id')
 
-    if not re.fullmatch(r'[a-zA-Z0-9,]+', expr):
-        err = MmcifError("unsupported expression")
-        err.info = [
-                "parenthetical expressions in biological assembly transformations are not currently supported",
-                "handling these cases properly is not trivial, and at the time this code was written, there were no examples of such expressions in the PDB",
+    # It's not totally clear how non-numeric operation id should be treated by 
+    # ranges, so we only allow numeric ids in ranges.
+    oper_id_int = regex(r'[0-9]+').desc('oper id')
+
+    @generate
+    def oper_id_range():
+        a = yield oper_id_int
+        yield string('-')
+        b = yield oper_id_int
+        return [str(x) for x in range(int(a), int(b)+1)]
+
+    @generate
+    def oper_list():
+        oper_id_term = oper_id_range | oper_id.map(lambda x: [x])
+        oper_ids = yield oper_id_term.sep_by(string(','))
+        return [[x] for x in flatten(oper_ids)]
+
+    oper_group = string('(') >> oper_list << string(')')
+
+    @generate
+    def oper_cartesian_product():
+        term = yield oper_group
+        terms = []
+
+        while term:
+            terms.append(term)
+            term = yield oper_group.optional()
+
+        return [
+                sum(x, start=[])
+                for x in product(*terms)
         ]
-        err.blame = [f"expression: {expr}"]
-        raise err
 
-    return [
-            oper_map[k]
-            for k in expr.split(',')
-    ]
+    return oper_cartesian_product | oper_list
 
 @dataclass
 class Column:

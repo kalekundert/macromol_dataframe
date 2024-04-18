@@ -16,6 +16,7 @@ classifiers = [
 dependencies = [
     'gemmi',
     'numpy',
+    'parsy',
     'polars',
     'scipy',
 ]

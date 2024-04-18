@@ -11,16 +11,11 @@ from macromol_dataframe.testing import dataframe, atoms_csv, matrix
 from pathlib import Path
 
 with_pl = pff.Namespace('import polars as pl')
-with_mmdf = pff.Namespace(mmdf=mmdf, Column=_mmdf.Column)
-
-def assembly_gen(params):
-    return dataframe(
-            params,
-            required_cols=['assembly_id', 'subchain_ids', 'oper_expr'],
-            exprs={
-                'subchain_ids': pl.col('subchain_ids').str.split(',')
-            },
-    )
+with_mmdf = pff.Namespace(
+        mmdf=mmdf,
+        Column=_mmdf.Column,
+        MmcifError=mmdf.MmcifError,
+)
 
 def oper_map(params):
     return {k: matrix(v) for k, v in params.items()}
@@ -53,7 +48,7 @@ def test_extract_dataframe(mmcif, prefix, schema, expected, error):
         schema=[
             pff.cast(
                 asym_atoms=atoms_csv,
-                assembly_gen=assembly_gen,
+                assembly_gen=with_pl.eval,
                 oper_map=oper_map,
                 entities=entities,
             ),
@@ -125,6 +120,7 @@ def test_read_biological_assembly(tmp_path, mmcif, model_id, assembly_id, expect
                 atoms, expected,
                 check_exact=False,
                 check_column_order=False,
+                atol=1e-5,
         )
 
 @pff.parametrize(
@@ -177,3 +173,12 @@ Check this output manually.  If it looks good, copy it to:
 def test_get_pdb_path():
     assert mmdf.get_pdb_path('dir', '1abc') == Path('dir/ab/1abc.cif.gz')
     assert mmdf.get_pdb_path('dir', '1abc', '.pdb') == Path('dir/ab/1abc.pdb')
+
+@pff.parametrize(
+        schema=with_mmdf.error_or('expected'),
+)
+def test_parse_oper_expression(oper_expr, expected, error):
+    with error:
+        assert _mmdf._parse_oper_expression(oper_expr) == expected
+
+

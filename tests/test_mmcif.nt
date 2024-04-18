@@ -189,8 +189,9 @@ test_read_mmcif:
       > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
       > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
     assembly_gen:
-      > assembly_id subchain_ids oper_expr
-      >           1            A         1
+      > pl.DataFrame([
+      >     dict(assembly_id='1', subchain_ids=['A'], oper_ids=[['1']]),
+      > ])
     oper_map:
       1:
         > 1 0 0 0
@@ -260,9 +261,10 @@ test_read_mmcif:
       > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
       > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
     assembly_gen:
-      > assembly_id subchain_ids oper_expr
-      >           1          A,B       1,2
-      >           2            C       1,2
+      > pl.DataFrame([
+      >     dict(assembly_id='1', subchain_ids=['A', 'B'], oper_ids=[['1'], ['2']]),
+      >     dict(assembly_id='2', subchain_ids=['C'], oper_ids=[['1'], ['2']]),
+      > ])
     oper_map:
       1:
         > 1  0  0  0
@@ -315,8 +317,9 @@ test_read_mmcif:
       > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
       > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
     assembly_gen:
-      > assembly_id subchain_ids oper_expr
-      >           1            A         1
+      > pl.DataFrame([
+      >     dict(assembly_id='1', subchain_ids=['A'], oper_ids=[['1']]),
+      > ])
     oper_map:
       1:
         > 1 0 0 0
@@ -822,6 +825,123 @@ test_read_biological_assembly:
       > 1,A,A,1,,69,ILE,CA,C,21.77584, 9.73346,87.15000,1.0,21.29
       > 2,A,A,1,,69,ILE,CA,C,16.50166,13.99171,87.15000,1.0,21.29
   -
+    id: assembly-oper-expr-2gtl
+    mmcif:
+      > data_2GTL
+      > # 
+      > loop_
+      > _pdbx_struct_assembly_gen.assembly_id 
+      > _pdbx_struct_assembly_gen.oper_expression 
+      > _pdbx_struct_assembly_gen.asym_id_list 
+      > 1 '(1-12)'        A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,BA,CA,DA,EA,FA,GA,HA,IA,JA,KA,LA,MA,NA,OA,PA,QA,RA 
+      > 2 1               A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,BA,CA,DA,EA,FA,GA,HA,IA,JA,KA,LA,MA,NA,OA,PA,QA,RA 
+      > 3 P               A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,BA,CA,DA,EA,FA,GA,HA,IA,JA,KA,LA,MA,NA,OA,PA,QA,RA 
+      > 4 '(X0,X1)(1-12)' A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,AA,BA,CA,DA,EA,FA,GA,HA,IA,JA,KA,LA,MA,NA,OA,PA,QA,RA 
+      > # 
+      > loop_
+      > _pdbx_struct_oper_list.id 
+      > _pdbx_struct_oper_list.type 
+      > _pdbx_struct_oper_list.name 
+      > _pdbx_struct_oper_list.symmetry_operation 
+      > _pdbx_struct_oper_list.matrix[1][1] 
+      > _pdbx_struct_oper_list.matrix[1][2] 
+      > _pdbx_struct_oper_list.matrix[1][3] 
+      > _pdbx_struct_oper_list.vector[1] 
+      > _pdbx_struct_oper_list.matrix[2][1] 
+      > _pdbx_struct_oper_list.matrix[2][2] 
+      > _pdbx_struct_oper_list.matrix[2][3] 
+      > _pdbx_struct_oper_list.vector[2] 
+      > _pdbx_struct_oper_list.matrix[3][1] 
+      > _pdbx_struct_oper_list.matrix[3][2] 
+      > _pdbx_struct_oper_list.matrix[3][3] 
+      > _pdbx_struct_oper_list.vector[3] 
+      > P  'transform to point frame'   ? ? -0.04222503 0.93125193  0.36192110  0.89873  0.15424759  -0.35182496 0.92326967  -0.52588  
+      > 0.98712954  0.09481055  -0.12878755 0.44512   
+      > X0 'transform to crystal frame' ? ? 1.00000000  0.00000000  0.00000000  0.00000  0.00000000  1.00000000  0.00000000  0.00000   
+      > 0.00000000  0.00000000  1.00000000  0.00000   
+      > X1 'transform to crystal frame' ? ? 0.98952     0.14395     0.01155     63.79785 -0.14429    0.98878     0.03853     132.83920 
+      > -0.00587    -0.03979    0.99919     216.14185 
+      > 1  'point symmetry operation'   ? ? 1.00000000  0.00000000  0.00000000  0.00000  0.00000000  1.00000000  0.00000000  0.00000   
+      > 0.00000000  0.00000000  1.00000000  0.00000   
+      > 2  'point symmetry operation'   ? ? 0.98721236  0.15832844  0.01854335  0.16036  -0.06473814 0.50449453  -0.86098447 -0.36070  
+      > -0.14567334 0.84877405  0.50829311  0.96356   
+      > 3  'point symmetry operation'   ? ? 0.96163709  0.25191873  -0.10858665 0.27942  0.02885215  -0.48651643 -0.87319488 -1.38266  
+      > -0.27280333 0.83656363  -0.47512066 1.12382   
+      > 4  'point symmetry operation'   ? ? 0.94884945  0.18718059  -0.25425999 0.23813  0.18718058  -0.98202192 -0.02442084 -2.04392  
+      > -0.25425998 -0.02442084 -0.96682753 0.32052   
+      > 5  'point symmetry operation'   ? ? 0.96163709  0.02885215  -0.27280334 0.07777  0.25191873  -0.48651645 0.83656363  -1.68322  
+      > -0.10858664 -0.87319489 -0.47512064 -0.64304  
+      > 6  'point symmetry operation'   ? ? 0.98721236  -0.06473814 -0.14567334 -0.04129 0.15832843  0.50449451  0.84877405  -0.66126  
+      > 0.01854335  -0.86098447 0.50829312  -0.80330  
+      > 7  'point symmetry operation'   ? ? -0.99643409 -0.07864428 -0.03056426 -0.71655 -0.07864428 0.73446032  0.67407945  -0.45444  
+      > -0.03056426 0.67407946  -0.73802623 1.08571   
+      > 8  'point symmetry operation'   ? ? -0.97414837 -0.22338161 0.03369868  -0.87742 -0.22338161 0.93022073  -0.29118732 -0.08245  
+      > 0.03369868  -0.29118730 -0.95607236 0.12654   
+      > 9  'point symmetry operation'   ? ? -0.95213901 -0.23832762 0.19139293  -0.92059 -0.23832762 0.18677137  -0.95305635 -0.73438  
+      > 0.19139293  -0.95305635 -0.23463236 -0.68426  
+      > 10 'point symmetry operation'   ? ? -0.95241536 -0.10853631 0.28482425  -0.80288 -0.10853630 -0.75243840 -0.64965861 -1.75829  
+      > 0.28482424  -0.64965863 0.70485376  -0.53589  
+      > 11 'point symmetry operation'   ? ? -0.97470108 0.03620102  0.22056131  -0.64202 0.03620102  -0.94819881 0.31560815  -2.13028  
+      > 0.22056130  0.31560814  0.92289989  0.42329   
+      > 12 'point symmetry operation'   ? ? -0.99671045 0.05114704  0.06286705  -0.59885 0.05114703  -0.20474945 0.97747718  -1.47835  
+      > 0.06286705  0.97747718  0.20145990  1.23408   
+      > # 
+      > loop_
+      > _atom_site.group_PDB 
+      > _atom_site.id 
+      > _atom_site.type_symbol 
+      > _atom_site.label_atom_id 
+      > _atom_site.label_alt_id 
+      > _atom_site.label_comp_id 
+      > _atom_site.label_asym_id 
+      > _atom_site.label_entity_id 
+      > _atom_site.label_seq_id 
+      > _atom_site.pdbx_PDB_ins_code 
+      > _atom_site.Cartn_x 
+      > _atom_site.Cartn_y 
+      > _atom_site.Cartn_z 
+      > _atom_site.occupancy 
+      > _atom_site.B_iso_or_equiv 
+      > _atom_site.pdbx_formal_charge 
+      > _atom_site.auth_seq_id 
+      > _atom_site.auth_comp_id 
+      > _atom_site.auth_asym_id 
+      > _atom_site.auth_atom_id 
+      > _atom_site.pdbx_PDB_model_num 
+      > ATOM   1     N  N   . ASP A  1  5   ? 13.713  113.012 45.193  1.00 121.78 ? 5   ASP A N   1 
+    model_id: 1
+    assembly_id: 4
+    expected:
+      # Coordinates from PyMOL:
+      # PyMOL> set assembly, 4
+      # PyMOL> fetch 2gtl
+      # PyMOL> iterate_state 0, A/5/N, print(f'{x:.5f},{y:.5f},{z:.5f}')
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0, A,A,1,,5,ASP,N,N, 13.71300, 113.01200,  45.19300,1.0,121.78
+      > 1, A,A,1,,5,ASP,N,N, 32.42905,  16.85502, 117.85889,1.0,121.78
+      > 2, A,A,1,,5,ASP,N,N, 37.02883, -95.43150,  70.45247,1.0,121.78
+      > 3, A,A,1,,5,ASP,N,N, 22.91258,-111.56103, -49.61983,1.0,121.78
+      > 4, A,A,1,,5,ASP,N,N,  4.19654, -15.40403,-122.28573,1.0,121.78
+      > 5, A,A,1,,5,ASP,N,N, -0.40325,  96.88247, -74.87930,1.0,121.78
+      > 6, A,A,1,,5,ASP,N,N,-24.64969, 111.93362,  43.49203,1.0,121.78
+      > 7, A,A,1,,5,ASP,N,N,-37.95778,  88.82079, -75.52679,1.0,121.78
+      > 8, A,A,1,,5,ASP,N,N,-32.26153, -25.96664,-116.37023,1.0,121.78
+      > 9, A,A,1,,5,ASP,N,N,-13.25720,-117.64124, -38.19486,1.0,121.78
+      > 10,A,A,1,,5,ASP,N,N,  0.05088, -94.52843,  80.82397,1.0,121.78
+      > 11,A,A,1,,5,ASP,N,N, -5.64536,  20.25901, 121.66740,1.0,121.78
+      > 12,A,A,1,,5,ASP,N,N, 94.15720, 244.34586, 256.72101,1.0,121.78
+      > 13,A,A,1,,5,ASP,N,N, 99.67459, 149.36702, 333.04425,1.0,121.78
+      > 14,A,A,1,,5,ASP,N,N, 87.51498,  35.85008, 290.11710,1.0,121.78
+      > 15,A,A,1,,5,ASP,N,N, 69.83799,  17.31198, 170.86671,1.0,121.78
+      > 16,A,A,1,,5,ASP,N,N, 64.32060, 112.29082,  94.54346,1.0,121.78
+      > 17,A,A,1,,5,ASP,N,N, 76.48021, 225.80774, 137.47061,1.0,121.78
+      > 18,A,A,1,,5,ASP,N,N, 56.02167, 248.74939, 255.28951,1.0,121.78
+      > 19,A,A,1,,5,ASP,N,N, 38.15129, 223.23032, 137.36487,1.0,121.78
+      > 20,A,A,1,,5,ASP,N,N, 26.79245, 107.33518, 101.08846,1.0,121.78
+      > 21,A,A,1,,5,ASP,N,N, 33.30398,  16.95912, 182.73669,1.0,121.78
+      > 22,A,A,1,,5,ASP,N,N, 51.17435,  42.47820, 300.66132,1.0,121.78
+      > 23,A,A,1,,5,ASP,N,N, 62.53320, 158.37332, 336.93774,1.0,121.78
+  -
     id: err-unknown-assembly
     mmcif:
       > data_9XYZ
@@ -854,12 +974,12 @@ test_read_biological_assembly:
       pattern:
         - path: .*/mock\.cif
   -
-    id: err-unsupported-oper-hyphen
+    id: err-missing-assembly-operation
     mmcif:
       > data_9XYZ
       > # 
       > _pdbx_struct_assembly_gen.assembly_id       1 
-      > _pdbx_struct_assembly_gen.oper_expression   1-2 
+      > _pdbx_struct_assembly_gen.oper_expression   1,2,3
       > _pdbx_struct_assembly_gen.asym_id_list      A
       > # 
       > loop_
@@ -881,8 +1001,6 @@ test_read_biological_assembly:
       > _pdbx_struct_oper_list.vector[3] 
       > 1 'identity operation'         1_555 x,y,z   1.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000  
       > 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000  0.0000000000 
-      > 2 'crystal symmetry operation' 4_555 x,-y,-z 1.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000 -1.0000000000 
-      > 0.0000000000 0.0000000000 0.0000000000 0.0000000000 -1.0000000000 0.0000000000 
       > # 
       > loop_
       > _atom_site.auth_asym_id 
@@ -906,65 +1024,9 @@ test_read_biological_assembly:
     error:
       type: mmdf.MmcifError
       message:
-        - unsupported expression
-        - expression: 1-2
-      pattern:
-        - path: .*/mock\.cif
-  -
-    id: err-unsupported-oper-paren
-    mmcif:
-      > data_9XYZ
-      > # 
-      > _pdbx_struct_assembly_gen.assembly_id       1 
-      > _pdbx_struct_assembly_gen.oper_expression   (1)(2)
-      > _pdbx_struct_assembly_gen.asym_id_list      A
-      > # 
-      > loop_
-      > _pdbx_struct_oper_list.id 
-      > _pdbx_struct_oper_list.type 
-      > _pdbx_struct_oper_list.name 
-      > _pdbx_struct_oper_list.symmetry_operation 
-      > _pdbx_struct_oper_list.matrix[1][1] 
-      > _pdbx_struct_oper_list.matrix[1][2] 
-      > _pdbx_struct_oper_list.matrix[1][3] 
-      > _pdbx_struct_oper_list.vector[1] 
-      > _pdbx_struct_oper_list.matrix[2][1] 
-      > _pdbx_struct_oper_list.matrix[2][2] 
-      > _pdbx_struct_oper_list.matrix[2][3] 
-      > _pdbx_struct_oper_list.vector[2] 
-      > _pdbx_struct_oper_list.matrix[3][1] 
-      > _pdbx_struct_oper_list.matrix[3][2] 
-      > _pdbx_struct_oper_list.matrix[3][3] 
-      > _pdbx_struct_oper_list.vector[3] 
-      > 1 'identity operation'         1_555 x,y,z   1.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000  
-      > 0.0000000000 0.0000000000 0.0000000000 0.0000000000 1.0000000000  0.0000000000 
-      > 2 'crystal symmetry operation' 4_555 x,-y,-z 1.0000000000 0.0000000000 0.0000000000 0.0000000000 0.0000000000 -1.0000000000 
-      > 0.0000000000 0.0000000000 0.0000000000 0.0000000000 -1.0000000000 0.0000000000 
-      > # 
-      > loop_
-      > _atom_site.auth_asym_id 
-      > _atom_site.label_asym_id 
-      > _atom_site.label_alt_id 
-      > _atom_site.label_seq_id 
-      > _atom_site.label_comp_id 
-      > _atom_site.label_atom_id 
-      > _atom_site.type_symbol 
-      > _atom_site.Cartn_x 
-      > _atom_site.Cartn_y 
-      > _atom_site.Cartn_z 
-      > _atom_site.occupancy 
-      > _atom_site.B_iso_or_equiv 
-      > AAA A . 1 GLY N  N -1.195  0.201 -0.206 1.00 0.00
-      > AAA A . 1 GLY CA C  0.230  0.318 -0.502 1.00 0.00
-      > AAA A . 1 GLY C  C  1.059 -0.390  0.542 1.00 0.00
-      > AAA A . 1 GLY O  O  0.545 -0.975  1.499 1.00 0.00
-    model_id: 1
-    assembly_id: 1
-    error:
-      type: mmdf.MmcifError
-      message:
-        - unsupported expression
-        - expression: (1)(2)
+        - missing assembly operation
+        - assembly: 1
+        - operations referenced but not defined: 2,3
       pattern:
         - path: .*/mock\.cif
 
@@ -1134,3 +1196,208 @@ test_read_asymmetric_unit:
       > ,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,0.00,0.00
       > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
       > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+
+test_parse_oper_expression:
+  -
+    oper_expr: 1
+    expected:
+      [[1]]
+  -
+    oper_expr: 12
+    expected:
+      [[12]]
+  -
+    oper_expr: A
+    expected:
+      [[A]]
+  -
+    oper_expr: _
+    expected:
+      [[_]]
+  -
+    oper_expr: X0
+    expected:
+      [[X0]]
+  -
+    oper_expr: -
+    error: 
+      type: MmcifError
+      message:
+        - expression: -
+        - expected one of '(', 'EOF', 'oper id' at 0:0
+  -
+    oper_expr: ,
+    error: MmcifError
+  -
+    oper_expr: 1,2
+    expected:
+      [[1],[2]]
+  -
+    oper_expr: A,B
+    expected:
+      [[A],[B]]
+  -
+    oper_expr: 1,
+    error:
+      type: MmcifError
+      message:
+        - expression: 1,
+        - expected 'oper id' at 0:2
+  -
+    oper_expr: ,2
+    error: MmcifError
+  -
+    oper_expr: 1-3
+    expected:
+      [[1],[2],[3]]
+  -
+    oper_expr: 9-11
+    expected:
+      [[9],[10],[11]]
+  -
+    oper_expr: A-B
+    error: MmcifError
+  -
+    oper_expr: -1
+    error: MmcifError
+  -
+    oper_expr: 1-
+    error: MmcifError
+  -
+    oper_expr: 1,3-5
+    expected:
+      [[1],[3],[4],[5]]
+  -
+    oper_expr: 1-3,5
+    expected:
+      [[1],[2],[3],[5]]
+  -
+    oper_expr: (1)
+    expected:
+      [[1]]
+  -
+    oper_expr: (A)
+    expected:
+      [[A]]
+  -
+    oper_expr: (1
+    error: MmcifError
+  -
+    oper_expr: 1)
+    error: MmcifError
+  -
+    oper_expr: (1,2)
+    expected:
+      [[1],[2]]
+  -
+    oper_expr: (A,B)
+    expected:
+      [[A],[B]]
+  -
+    oper_expr: (1-3)
+    expected:
+      [[1],[2],[3]]
+  -
+    oper_expr: (1-3)
+    expected:
+      [[1],[2],[3]]
+  -
+    oper_expr: (1,3-5)
+    expected:
+      [[1],[3],[4],[5]]
+  -
+    oper_expr: (1-3,5)
+    expected:
+      [[1],[2],[3],[5]]
+  -
+    oper_expr: (1)(2)
+    expected:
+      [[1,2]]
+  -
+    oper_expr: (1)(2
+    error: MmcifError
+  -
+    oper_expr: (1()2)
+    error: MmcifError
+  -
+    oper_expr: (1)2)
+    error: MmcifError
+  -
+    oper_expr: (1(2)
+    error: MmcifError
+  -
+    oper_expr: (1,2)(3)
+    expected:
+      [[1,3],[2,3]]
+  -
+    oper_expr: (1)(2,3)
+    expected:
+      [[1,2],[1,3]]
+  -
+    oper_expr: (1,2)(3,4)
+    expected:
+      [[1,3],[1,4],[2,3],[2,4]]
+  -
+    oper_expr: (1-2)(3,4)
+    expected:
+      [[1,3],[1,4],[2,3],[2,4]]
+  -
+    oper_expr: (1,2)(3-4)
+    expected:
+      [[1,3],[1,4],[2,3],[2,4]]
+  -
+    oper_expr: (1-2)(3-4)
+    expected:
+      [[1,3],[1,4],[2,3],[2,4]]
+  -
+    oper_expr: (1-3)(4-6)
+    expected:
+      [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+  -
+    oper_expr: (1-2,3)(4-5,6)
+    expected:
+      [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+  -
+    oper_expr: (1-2,3)(4,5-6)
+    expected:
+      [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+  -
+    oper_expr: (1,2-3)(4-5,6)
+    expected:
+      [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+  -
+    oper_expr: (1,2-3)(4,5-6)
+    expected:
+      [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+  -
+    oper_expr: (1,2,3)(4,5,6)
+    expected:
+      [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+  -
+    oper_expr: (1)(2)(3)
+    expected:
+      [[1,2,3]]
+  -
+    oper_expr: (1,2)(3)(4)
+    expected:
+      [[1,3,4],[2,3,4]]
+  -
+    oper_expr: (1)(2,3)(4)
+    expected:
+      [[1,2,4],[1,3,4]]
+  -
+    oper_expr: (1)(2)(3,4)
+    expected:
+      [[1,2,3],[1,2,4]]
+
+  # Some hairy examples from real structures:
+  -
+    id: 1h8t
+    oper_expr: (X0)(1-5,11-15,21-25,36-40)
+    expected:
+      [[X0,1], [X0,2], [X0,3], [X0,4], [X0,5], [X0,11], [X0,12], [X0,13], [X0,14], [X0,15], [X0,21], [X0,22], [X0,23], [X0,24], [X0,25], [X0,36], [X0,37], [X0,38], [X0,39], [X0,40]]
+  -
+    id: 1mvm
+    oper_expr: (X0,X1)(1-10,21-25,31-35,41-50)
+    expected:
+      [[X0,1], [X0,2], [X0,3], [X0,4], [X0,5], [X0,6], [X0,7], [X0,8], [X0,9], [X0,10], [X0,21], [X0,22], [X0,23], [X0,24], [X0,25], [X0,31], [X0,32], [X0,33], [X0,34], [X0,35], [X0,41], [X0,42], [X0,43], [X0,44], [X0,45], [X0,46], [X0,47], [X0,48], [X0,49], [X0,50], [X1,1], [X1,2], [X1,3], [X1,4], [X1,5], [X1,6], [X1,7], [X1,8], [X1,9], [X1,10], [X1,21], [X1,22], [X1,23], [X1,24], [X1,25], [X1,31], [X1,32], [X1,33], [X1,34], [X1,35], [X1,41], [X1,42], [X1,43], [X1,44], [X1,45], [X1,46], [X1,47], [X1,48], [X1,49], [X1,50]]
