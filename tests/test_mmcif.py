@@ -6,6 +6,7 @@ import polars as pl
 import polars.testing
 import numpy as np
 import gemmi.cif
+import re
 
 from macromol_dataframe.testing import dataframe, atoms_csv, matrix
 from pathlib import Path
@@ -48,9 +49,17 @@ def test_extract_dataframe(mmcif, prefix, schema, expected, error):
         schema=[
             pff.cast(
                 asym_atoms=atoms_csv,
+                assemblies=with_pl.eval,
                 assembly_gen=with_pl.eval,
                 oper_map=oper_map,
                 entities=entities,
+            ),
+            pff.defaults(
+                asym_atoms=None,
+                assemblies=None,
+                assembly_gen=None,
+                oper_map=None,
+                entities=None,
             ),
             with_mmdf.error_or(
                 'pdb_id',
@@ -66,13 +75,17 @@ def test_read_mmcif(
         mmcif,
         pdb_id,
         asym_atoms,
+        assemblies,
         assembly_gen,
         oper_map,
         entities,
         error,
 ):
-    cif_path = tmp_path / 'mock.cif'
-    cif_path.write_text(mmcif)
+    if re.search(r'.cif(\.gz)?$', mmcif):
+        cif_path = Path(__file__).parent / mmcif
+    else:
+        cif_path = tmp_path / 'mock.cif'
+        cif_path.write_text(mmcif)
 
     with error:
         struct = mmdf.read_mmcif(cif_path)
@@ -80,25 +93,37 @@ def test_read_mmcif(
     if not error:
         assert repr(struct) == f'<Structure {struct.id}>'
         assert struct.id == pdb_id
-        pl.testing.assert_frame_equal(
-                struct.asym_atoms, asym_atoms,
-                check_exact=False,
-                check_column_order=False,
-        )
-        pl.testing.assert_frame_equal(
-                struct.assembly_gen, assembly_gen,
-                check_exact=False,
-                check_column_order=False,
-        )
-        for k in oper_map:
-            np.testing.assert_allclose(
-                    struct.oper_map[k], oper_map[k]
+
+        if asym_atoms is not None:
+            pl.testing.assert_frame_equal(
+                    struct.asym_atoms, asym_atoms,
+                    check_exact=False,
+                    check_column_order=False,
             )
-        pl.testing.assert_frame_equal(
-                struct.entities, entities,
-                check_exact=False,
-                check_column_order=False,
-        )
+
+        if assemblies is not None:
+            pl.testing.assert_frame_equal(
+                    struct.assemblies, assemblies,
+                    check_column_order=False,
+            )
+
+        if assembly_gen is not None:
+            pl.testing.assert_frame_equal(
+                    struct.assembly_gen, assembly_gen,
+                    check_exact=False,
+                    check_column_order=False,
+            )
+
+        if oper_map is not None:
+            for k in oper_map:
+                np.testing.assert_allclose(struct.oper_map[k], oper_map[k])
+
+        if entities is not None:
+            pl.testing.assert_frame_equal(
+                    struct.entities, entities,
+                    check_exact=False,
+                    check_column_order=False,
+            )
 
 @pff.parametrize(
         schema=[

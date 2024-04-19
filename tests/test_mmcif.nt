@@ -201,6 +201,99 @@ test_read_mmcif:
     entities:
       > id type mw
   -
+    id: assemblies-2gtl
+    mmcif: pdb/2gtl.cif.gz
+    pdb_id: 2GTL
+    assemblies:
+      > pl.DataFrame([
+      >     dict(
+      >         id='1',
+      >         details='complete point assembly',
+      >         polymer_count=180,
+      >     ),
+      >     dict(
+      >         id='2',
+      >         details='point asymmetric unit',
+      >         polymer_count=15,
+      >     ),
+      >     dict(
+      >         id='3',
+      >         details='point asymmetric unit, std point frame',
+      >         polymer_count=15,
+      >     ),
+      >     dict(
+      >         id='4',
+      >         details='crystal asymmetric unit',
+      >         polymer_count=360,
+      >     ),
+      > ])
+    assembly_gen:
+      > pl.DataFrame([
+      >     dict(
+      >         assembly_id='1',
+      >         subchain_ids=[
+      >             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
+      >             'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
+      >             'Y', 'Z', 'AA', 'BA', 'CA', 'DA', 'EA', 'FA', 'GA', 'HA', 
+      >             'IA', 'JA', 'KA', 'LA', 'MA', 'NA', 'OA', 'PA', 'QA', 'RA',
+      >         ],
+      >         oper_ids=[
+      >             ['1'], ['2'], ['3'], ['4'], ['5'], ['6'], ['7'], ['8'], 
+      >             ['9'], ['10'], ['11'], ['12'],
+      >         ],
+      >     ),
+      >     dict(
+      >         assembly_id='2',
+      >         subchain_ids=[
+      >             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
+      >             'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
+      >             'Y', 'Z', 'AA', 'BA', 'CA', 'DA', 'EA', 'FA', 'GA', 'HA', 
+      >             'IA', 'JA', 'KA', 'LA', 'MA', 'NA', 'OA', 'PA', 'QA', 'RA',
+      >         ],
+      >         oper_ids=[['1']],
+      >     ),
+      >     dict(
+      >         assembly_id='3',
+      >         subchain_ids=[
+      >             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
+      >             'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
+      >             'Y', 'Z', 'AA', 'BA', 'CA', 'DA', 'EA', 'FA', 'GA', 'HA', 
+      >             'IA', 'JA', 'KA', 'LA', 'MA', 'NA', 'OA', 'PA', 'QA', 'RA',
+      >         ],
+      >         oper_ids=[['P']],
+      >     ),
+      >     dict(
+      >         assembly_id='4',
+      >         subchain_ids=[
+      >             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
+      >             'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
+      >             'Y', 'Z', 'AA', 'BA', 'CA', 'DA', 'EA', 'FA', 'GA', 'HA', 
+      >             'IA', 'JA', 'KA', 'LA', 'MA', 'NA', 'OA', 'PA', 'QA', 'RA',
+      >         ],
+      >         oper_ids=[
+      >             ['X0','1'], ['X0','2'], ['X0','3'], ['X0','4'], ['X0','5'], 
+      >             ['X0','6'], ['X0','7'], ['X0','8'], ['X0','9'], 
+      >             ['X0','10'], ['X0','11'], ['X0','12'],
+      >             ['X1','1'], ['X1','2'], ['X1','3'], ['X1','4'], ['X1','5'], 
+      >             ['X1','6'], ['X1','7'], ['X1','8'], ['X1','9'], 
+      >             ['X1','10'], ['X1','11'], ['X1','12'], 
+      >         ],
+      >     ),
+      > ])
+    entities:
+      > id type        mw
+      > 1  polymer     17566.990
+      > 2  polymer     16268.229
+      > 3  polymer     17331.793
+      > 4  polymer     15988.263
+      > 5  polymer     24936.734
+      > 6  polymer     25057.027
+      > 7  polymer     24486.023
+      > 8  non-polymer 28.010
+      > 9  non-polymer 616.487
+      > 10 non-polymer 40.078
+      > 11 non-polymer 65.409
+  -
     id: assembly-gen
     mmcif:
       > data_9XYZ

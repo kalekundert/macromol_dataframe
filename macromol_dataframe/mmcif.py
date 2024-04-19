@@ -53,6 +53,7 @@ def read_mmcif(cif_path: Path) -> Structure:
     with _add_path_to_mmcif_error(cif_path):
         struct = Structure(cif.name)
         struct.asym_atoms = _extract_atom_site(cif)
+        struct.assemblies = _extract_struct_assembly(cif)
         struct.assembly_gen, struct.oper_map = \
                 _extract_struct_assembly_gen(cif, struct.asym_atoms)
         struct.entities = _extract_entities(cif)
@@ -387,6 +388,16 @@ def _extract_atom_site(cif):
                 pl.col('occupancy').clip(0, 1)
             )
     )
+
+def _extract_struct_assembly(cif):
+        return _extract_dataframe(
+                cif, 'pdbx_struct_assembly',
+                schema=dict(
+                    id=Column('id', required=True),
+                    details=Column('details'),
+                    polymer_count=Column('oligomeric_count', dtype=int),
+                ),
+        )
 
 def _extract_struct_assembly_gen(cif, asym_atoms):
     """
