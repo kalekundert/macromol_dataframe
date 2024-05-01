@@ -2,6 +2,41 @@
 
 
 
+## v0.2.0 (2024-05-01)
+
+### Chore
+
+* chore: upgrade Codecov action ([`97873f4`](https://github.com/kalekundert/macromol_dataframe/commit/97873f4120823724b681cbe98afa1334e459b111))
+
+### Documentation
+
+* docs: write a README file ([`65606c1`](https://github.com/kalekundert/macromol_dataframe/commit/65606c1dbdf313e3952907874ad1972fa1b7bd3e))
+
+### Feature
+
+* feat: automatically import the pymol module ([`28c4be1`](https://github.com/kalekundert/macromol_dataframe/commit/28c4be1e6ec68693afaf89a0efc01fe2cbafee05))
+
+* feat: parse more details about each biological assembly ([`2a9fb23`](https://github.com/kalekundert/macromol_dataframe/commit/2a9fb231c35e01840a08b9976dee09ca77a5567b))
+
+* feat: parse parenthetical assembly operation expressions ([`7f9a2b2`](https://github.com/kalekundert/macromol_dataframe/commit/7f9a2b28904bd8d9b1c1dab1719f1904c8f35633))
+
+* feat: load atoms from PyMOL selections ([`e676d7b`](https://github.com/kalekundert/macromol_dataframe/commit/e676d7b07b57706d6077f81f3584098ef1fe46c8))
+
+* feat: add a function to generate PDB-style paths ([`2ada4d0`](https://github.com/kalekundert/macromol_dataframe/commit/2ada4d079f0ec35f0e12ebfd2c9e665ee1a6379c))
+
+* feat: automatically clip occupancies to the range [0, 1] ([`5afadda`](https://github.com/kalekundert/macromol_dataframe/commit/5afaddaec20aefa3fc99cd0310d6d383d0bd3a1f))
+
+* feat: expose all dataframes parsed from mmCIF ([`b697c9b`](https://github.com/kalekundert/macromol_dataframe/commit/b697c9b83759b275b66fa697a45bf36e33d8515f))
+
+### Fix
+
+* fix: prune hydrogren and water ([`d5f9e2c`](https://github.com/kalekundert/macromol_dataframe/commit/d5f9e2cfc4b8db6282ec054960942b06a65e675a))
+
+### Test
+
+* test: complain about unsupported operation expressions ([`cb791ff`](https://github.com/kalekundert/macromol_dataframe/commit/cb791ffe370eeaf68f24f142c19618a7eb97dae5))
+
+
 ## v0.1.0 (2024-03-27)
 
 ### Chore
