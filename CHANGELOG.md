@@ -2,6 +2,13 @@
 
 
 
+## v0.3.0 (2024-05-09)
+
+### Feature
+
+* feat: add more ways to specify coordinate frames ([`984551d`](https://github.com/kalekundert/macromol_dataframe/commit/984551dbf4588e62d5bf9a1985a2e4886399d69d))
+
+
 ## v0.2.0 (2024-05-01)
 
 ### Chore
