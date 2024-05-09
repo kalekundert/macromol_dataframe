@@ -2,7 +2,7 @@ import numpy as np
 
 from scipy.spatial.transform import Rotation
 from numpy.typing import NDArray
-from typing import TypeAlias, Annotated
+from typing import TypeAlias, Annotated, Optional
 
 """\
 Naming conventions
@@ -38,11 +38,29 @@ goes from "X" to "Y", and end up with a coordinate in frame "Y".
 """
 
 Coord: TypeAlias = Annotated[NDArray[float], (3)]
+Coord3: TypeAlias = Annotated[NDArray[float], (3)]
+Coord4: TypeAlias = Annotated[NDArray[float], (4)]
+Coords: TypeAlias = Annotated[NDArray[float], (-1, 3)]
 Coords3: TypeAlias = Annotated[NDArray[float], (-1, 3)]
 Coords4: TypeAlias = Annotated[NDArray[float], (-1, 4)]
+Matrix33: TypeAlias = Annotated[NDArray[float], (3, 3)]
 Frame: TypeAlias = Annotated[NDArray[float], (4, 4)]
 
-def make_coord_frame(origin: Coord, rot_vec_rad: Coord) -> Frame:
+def make_coord_frame(
+        origin: Coord,
+        rotation: Optional[Rotation] = None,
+) -> Frame:
+    if rotation is None:
+        rot_mat = np.eye(3)
+    else:
+        rot_mat = rotation.as_matrix()
+
+    return make_coord_frame_from_rotation_matrix(origin, rot_mat)
+
+def make_coord_frame_from_rotation_vector(
+        origin: Coord,
+        rot_vec_rad: Coord,
+) -> Frame:
     """\
     Provide a convenient way to construct coordinate frame matrices.
 
@@ -72,13 +90,17 @@ def make_coord_frame(origin: Coord, rot_vec_rad: Coord) -> Frame:
             first.  This happens because it's the *coordinate frame* that's 
             being rotated by 90°, not the coordinates themselves.
     """
-    assert origin.size == 3
-    assert rot_vec_rad.size == 3
+    return make_coord_frame(origin, Rotation.from_rotvec(rot_vec_rad))
 
-    rot = Rotation.from_rotvec(rot_vec_rad).as_matrix()
+def make_coord_frame_from_rotation_matrix(
+        origin: Coord,
+        rot_matrix: Matrix33,
+):
+    assert origin.size == 3
+    assert rot_matrix.shape == (3, 3)
 
     frame_yx = np.eye(4)
-    frame_yx[0:3, 0:3] = rot
+    frame_yx[0:3, 0:3] = rot_matrix
     frame_yx[0:3,   3] = origin.ravel()
 
     # We need to invert the matrix, because the arguments are both from the 

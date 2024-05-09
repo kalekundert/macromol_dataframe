@@ -2,7 +2,7 @@ import polars as pl
 import numpy as np
 import math
 
-from .coords import make_coord_frame
+from .coords import make_coord_frame_from_rotation_vector
 from .error import TidyError
 from io import StringIO
 from functools import partial
@@ -19,7 +19,7 @@ def vector(params):
 def frame(params):
     origin = coord(params['origin'])
     rot_vec_rad = vector(params['rot_vec_rad'])
-    return make_coord_frame(origin, rot_vec_rad)
+    return make_coord_frame_from_rotation_vector(origin, rot_vec_rad)
 
 def frames(params):
     return [frame(x) for x in params]

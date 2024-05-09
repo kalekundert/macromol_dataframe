@@ -1,6 +1,7 @@
 import numpy as np
 import macromol_dataframe as mmdf
 import parametrize_from_file as pff
+import pytest
 
 from pytest import approx
 from hypothesis import given, settings
@@ -59,10 +60,23 @@ def test_transform_coords(frame_xy, coords_x, expected_y):
             expected_y=coords,
         ),
 )
-def test_make_coord_frame(origin, rot_vec_rad, coords_x, expected_y):
+@pytest.mark.parametrize(
+        'make_coord_frame', [
+            mmdf.make_coord_frame_from_rotation_vector,
+            lambda origin, rot_vec: mmdf.make_coord_frame(
+                origin, 
+                Rotation.from_rotvec(rot_vec),
+            ),
+            lambda origin, rot_vec: mmdf.make_coord_frame_from_rotation_matrix(
+                origin, 
+                Rotation.from_rotvec(rot_vec).as_matrix(),
+            ),
+        ]
+)
+def test_make_coord_frame(make_coord_frame, origin, rot_vec_rad, coords_x, expected_y):
     # It's not enough to test the 16 numbers making up the matrix, I need to 
     # test that it transforms things in the way it should.
-    frame_xy = mmdf.make_coord_frame(origin, rot_vec_rad)
+    frame_xy = make_coord_frame(origin, rot_vec_rad)
     test_transform_coords(frame_xy, coords_x, expected_y)
 
     np.testing.assert_allclose(
@@ -81,7 +95,7 @@ def test_make_coord_frame(origin, rot_vec_rad, coords_x, expected_y):
         arrays(float, 3, elements=float_bounds()),
 )
 def test_invert_coord_frame(origin, rot_vec_rad, coords_x):
-    frame_xy = mmdf.make_coord_frame(origin, rot_vec_rad)
+    frame_xy = mmdf.make_coord_frame_from_rotation_vector(origin, rot_vec_rad)
     frame_yx = mmdf.invert_coord_frame(frame_xy)
 
     coords_x = mmdf.homogenize_coords(coords_x)
