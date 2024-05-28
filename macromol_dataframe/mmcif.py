@@ -374,18 +374,24 @@ def _extract_atom_site(cif):
                     b_factor=Column('B_iso_or_equiv', dtype=float),
                 ),
             )
-            # Some structures (e.g. 1mno) have atoms with negative occupancies.  
-            # I'm not aware of any structures with occupancies greater than 1, 
-            # but if they exists, such values also wouldn't make any sense.  
-            #
-            # While there's some argument for leaving these nonsensical values 
-            # so the user can deal with them how they want, I think that most 
-            # users will simply not realize that this could be a problem at 
-            # all.  Clipping these values may not be exactly what the user 
-            # wants, but it will never be a crazy thing to do, and the 
-            # potential is has to avoid subtle bugs makes it worth it.
             .with_columns(
-                pl.col('occupancy').clip(0, 1)
+                # Some structures (e.g. 1mno) have atoms with negative 
+                # occupancies.  I'm not aware of any structures with 
+                # occupancies greater than 1, but if they exists, such values 
+                # also wouldn't make any sense.  
+                #
+                # While there's some argument for leaving these nonsensical 
+                # values so the user can deal with them how they want, I think 
+                # that most users will simply not realize that this could be a 
+                # problem at all.  Clipping these values may not be exactly 
+                # what the user wants, but it will never be a crazy thing to 
+                # do, and it has the potential to avoid subtle bugs.  Overall, 
+                # I think it's worth doing.
+                pl.col('occupancy').clip(0, 1),
+
+                # All of the elements in the PDB are uppercase anyways, but it 
+                # doesn't hurt to make sure.
+                pl.col('element').str.to_uppercase(),
             )
     )
 
