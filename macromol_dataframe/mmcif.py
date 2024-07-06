@@ -314,7 +314,10 @@ def _extract_dataframe(cif, key_prefix, schema):
     # happens to convert any booleans present in the data to null, thereby 
     # solving both of the above problems at once.
 
-    loop = cif.get_mmcif_category(f'_{key_prefix}.')
+    loop = {
+            k: [v if isinstance(v, str) else None for v in vs]
+            for k, vs in cif.get_mmcif_category(f'_{key_prefix}.').items()
+    }
     df = pl.DataFrame(loop, {k: str for k in loop})
 
     if df.is_empty():
@@ -555,7 +558,7 @@ def _make_oper_expression_parser():
 @dataclass
 class Column:
     name: str
-    dtype: pl.PolarsDataType = str
+    dtype: pl._typing.PolarsDataType = str
     required: bool = False
 
 class MmcifError(TidyError):
