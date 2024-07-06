@@ -2,6 +2,17 @@
 
 
 
+## v0.4.0 (2024-07-06)
+
+### Feature
+
+* feat: ensure element names are uppercase ([`6174e42`](https://github.com/kalekundert/macromol_dataframe/commit/6174e42d798b46b4d9e1a7d2c90c3bf4b32134cf))
+
+### Fix
+
+* fix: upgrade to polars 1.0 ([`0f4c3de`](https://github.com/kalekundert/macromol_dataframe/commit/0f4c3de297cfc3117598336633b83832e2a84de4))
+
+
 ## v0.3.0 (2024-05-09)
 
 ### Feature
