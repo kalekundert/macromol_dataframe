@@ -57,6 +57,7 @@ def read_mmcif(cif_path: Path) -> Structure:
         struct.assembly_gen, struct.oper_map = \
                 _extract_struct_assembly_gen(cif, struct.asym_atoms)
         struct.entities = _extract_entities(cif)
+        struct.polymers = _extract_polymers(cif)
     
     return struct
 
@@ -493,6 +494,35 @@ def _extract_entities(cif):
                 type=Column('type', dtype=str),
                 formula_weight_Da=Column('formula_weight', dtype=float),
             ),
+    )
+
+def _extract_polymers(cif):
+    return (
+            _extract_dataframe(
+                cif, 'entity_poly',
+                schema=dict(
+                    entity_id=Column('entity_id', dtype=str, required=True),
+                    strand_ids=Column('pdbx_strand_id', dtype=str),
+                    type=Column('type', dtype=str),
+                    sequence=Column('pdbx_seq_one_letter_code', dtype=str),
+                    sequence_canonical=Column('pdbx_seq_one_letter_code_can', dtype=str),
+                    has_nonstandard_linkage=Column('nstd_linkage', dtype=str),
+                    has_nonstandard_monomer=Column('nstd_monomer', dtype=str),
+                ),
+            )
+            .with_columns(
+                pl.col(
+                    'has_nonstandard_linkage',
+                    'has_nonstandard_monomer',
+                ).replace_strict({
+                    'n': False,
+                    'no': False,
+                    'y': True,
+                    'yes': True,
+                }),
+                pl.col('sequence', 'sequence_canonical').str.replace('\n', ''),
+                pl.col('strand_ids').str.split(','),
+            )
     )
 
 def _parse_oper_expression(expr: str):

@@ -402,6 +402,23 @@ test_read_mmcif:
       > 1 polymer     15785.705
       > 2 non-polymer 39.098
       > 3 water       18.015
+      > # 
+      > loop_
+      > _entity_poly.entity_id 
+      > _entity_poly.type 
+      > _entity_poly.nstd_linkage 
+      > _entity_poly.nstd_monomer 
+      > _entity_poly.pdbx_seq_one_letter_code 
+      > _entity_poly.pdbx_seq_one_letter_code_can 
+      > _entity_poly.pdbx_strand_id 
+      > 1 'polypeptide(L)' no no  
+      > ;MEKPYKCPECGKSFSQSSNLQKHQRTHTGEKPYKCPECGKSFSQSSDLQKHQRTHTGEKPYKCPECGKSFSRSDHLSRHQ
+      > RTHQNKK
+      > ;
+      > ;MEKPYKCPECGKSFSQSSNLQKHQRTHTGEKPYKCPECGKSFSQSSDLQKHQRTHTGEKPYKCPECGKSFSRSDHLSRHQ
+      > RTHQNKK
+      > ;
+      > A
     pdb_id: 9XYZ
     asym_atoms:
       > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
@@ -424,6 +441,18 @@ test_read_mmcif:
       > 1  polymer     15785.705
       > 2  non-polymer 39.098
       > 3  water       18.015
+    polymers:
+      > pl.DataFrame([
+      >     dict(
+      >         entity_id='1',
+      >         strand_ids=['A'],
+      >         type='polypeptide(L)',
+      >         sequence='MEKPYKCPECGKSFSQSSNLQKHQRTHTGEKPYKCPECGKSFSQSSDLQKHQRTHTGEKPYKCPECGKSFSRSDHLSRHQRTHQNKK',
+      >         sequence_canonical='MEKPYKCPECGKSFSQSSNLQKHQRTHTGEKPYKCPECGKSFSQSSDLQKHQRTHTGEKPYKCPECGKSFSRSDHLSRHQRTHQNKK',
+      >         has_nonstandard_linkage=False,
+      >         has_nonstandard_monomer=False,
+      >     ),
+      > ])
 
 test_read_biological_assembly:
   -

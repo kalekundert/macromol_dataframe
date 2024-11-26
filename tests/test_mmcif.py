@@ -53,6 +53,7 @@ def test_extract_dataframe(mmcif, prefix, schema, expected, error):
                 assembly_gen=with_pl.eval,
                 oper_map=oper_map,
                 entities=entities,
+                polymers=with_pl.eval,
             ),
             pff.defaults(
                 asym_atoms=None,
@@ -60,6 +61,7 @@ def test_extract_dataframe(mmcif, prefix, schema, expected, error):
                 assembly_gen=None,
                 oper_map=None,
                 entities=None,
+                polymers=None,
             ),
             with_mmdf.error_or(
                 'pdb_id',
@@ -67,6 +69,7 @@ def test_extract_dataframe(mmcif, prefix, schema, expected, error):
                 'assembly_gen',
                 'oper_map',
                 'entities',
+                'polymers',
             ),
         ],
 )
@@ -79,6 +82,7 @@ def test_read_mmcif(
         assembly_gen,
         oper_map,
         entities,
+        polymers,
         error,
 ):
     if re.search(r'.cif(\.gz)?$', mmcif):
@@ -121,6 +125,13 @@ def test_read_mmcif(
         if entities is not None:
             pl.testing.assert_frame_equal(
                     struct.entities, entities,
+                    check_exact=False,
+                    check_column_order=False,
+            )
+
+        if polymers is not None:
+            pl.testing.assert_frame_equal(
+                    struct.polymers, polymers,
                     check_exact=False,
                     check_column_order=False,
             )
