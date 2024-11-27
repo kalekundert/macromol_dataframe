@@ -368,6 +368,8 @@ def _extract_atom_site(cif):
                     entity_id=Column('label_entity_id'),
                     alt_id=Column('label_alt_id'),
                     seq_id=Column('label_seq_id', dtype=int),
+                    seq_label_1=Column('auth_seq_id'),
+                    seq_label_2=Column('pdbx_PDB_ins_code'),
                     comp_id=Column('label_comp_id'),
                     atom_id=Column('label_atom_id'),
                     element=Column('type_symbol', required=True),
@@ -379,9 +381,19 @@ def _extract_atom_site(cif):
                 ),
             )
             .with_columns(
+                pl.concat_str(
+                    'seq_label_1',
+                    'seq_label_2',
+                    ignore_nulls=True,
+                ).alias('seq_label').replace({'': None}),
+
+                # All of the elements in the PDB are uppercase anyways, but it 
+                # doesn't hurt to make sure.
+                pl.col('element').str.to_uppercase(),
+
                 # Some structures (e.g. 1mno) have atoms with negative 
                 # occupancies.  I'm not aware of any structures with 
-                # occupancies greater than 1, but if they exists, such values 
+                # occupancies greater than 1, but if they exist, such values 
                 # also wouldn't make any sense.  
                 #
                 # While there's some argument for leaving these nonsensical 
@@ -392,10 +404,10 @@ def _extract_atom_site(cif):
                 # do, and it has the potential to avoid subtle bugs.  Overall, 
                 # I think it's worth doing.
                 pl.col('occupancy').clip(0, 1),
-
-                # All of the elements in the PDB are uppercase anyways, but it 
-                # doesn't hurt to make sure.
-                pl.col('element').str.to_uppercase(),
+            )
+            .drop(
+                'seq_label_1',
+                'seq_label_2',
             )
     )
 

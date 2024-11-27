@@ -70,6 +70,7 @@ def atoms_csv(params):
             'subchain_id': str,
             'alt_id': str,
             'seq_id': int,
+            'seq_label': str,
             'comp_id': str,
             'atom_id': str,
             'element': str,

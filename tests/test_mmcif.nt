@@ -169,6 +169,8 @@ test_read_mmcif:
       > _atom_site.label_entity_id 
       > _atom_site.label_alt_id 
       > _atom_site.label_seq_id 
+      > _atom_site.auth_seq_id 
+      > _atom_site.pdbx_PDB_ins_code 
       > _atom_site.label_comp_id 
       > _atom_site.label_atom_id 
       > _atom_site.type_symbol 
@@ -177,17 +179,89 @@ test_read_mmcif:
       > _atom_site.Cartn_z 
       > _atom_site.occupancy 
       > _atom_site.B_iso_or_equiv 
-      > AAA A 1 . 1 GLY N  N -1.195  0.201 -0.206 1.00 0.00
-      > AAA A 1 . 1 GLY CA C  0.230  0.318 -0.502 1.00 0.00
-      > AAA A 1 . 1 GLY C  C  1.059 -0.390  0.542 1.00 0.00
-      > AAA A 1 . 1 GLY O  O  0.545 -0.975  1.499 1.00 0.00
+      > AAA A 1 . 1 1 ? GLY N  N -1.195  0.201 -0.206 1.00 0.00
+      > AAA A 1 . 1 1 ? GLY CA C  0.230  0.318 -0.502 1.00 0.00
+      > AAA A 1 . 1 1 ? GLY C  C  1.059 -0.390  0.542 1.00 0.00
+      > AAA A 1 . 1 1 ? GLY O  O  0.545 -0.975  1.499 1.00 0.00
     pdb_id: 9XYZ
     asym_atoms:
-      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > ,AAA,A,1,,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
-      > ,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
-      > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
-      > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > ,AAA,A,1,,1,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+    assembly_gen:
+      > pl.DataFrame([
+      >     dict(assembly_id='1', subchain_ids=['A'], oper_ids=[['1']]),
+      > ])
+    oper_map:
+      1:
+        > 1 0 0 0
+        > 0 1 0 0
+        > 0 0 1 0
+        > 0 0 0 1
+    entities:
+      > id type mw
+  -
+    id: asym-atoms-seq-label-3b9f
+    mmcif:
+      > data_3B9F
+      > # 
+      > loop_
+      > _atom_site.group_PDB 
+      > _atom_site.id 
+      > _atom_site.type_symbol 
+      > _atom_site.label_atom_id 
+      > _atom_site.label_alt_id 
+      > _atom_site.label_comp_id 
+      > _atom_site.label_asym_id 
+      > _atom_site.label_entity_id 
+      > _atom_site.label_seq_id 
+      > _atom_site.pdbx_PDB_ins_code 
+      > _atom_site.Cartn_x 
+      > _atom_site.Cartn_y 
+      > _atom_site.Cartn_z 
+      > _atom_site.occupancy 
+      > _atom_site.B_iso_or_equiv 
+      > _atom_site.pdbx_formal_charge 
+      > _atom_site.auth_seq_id 
+      > _atom_site.auth_comp_id 
+      > _atom_site.auth_asym_id 
+      > _atom_site.auth_atom_id 
+      > _atom_site.pdbx_PDB_model_num 
+      > ATOM   1    N N   . SER A 1 4   R -34.407 34.815  -63.204 1.00 32.04 ? 1    SER L N   1 
+      > ATOM   2    C CA  . SER A 1 4   R -34.478 34.039  -61.928 1.00 29.63 ? 1    SER L CA  1 
+      > ATOM   3    C C   . SER A 1 4   R -34.909 34.931  -60.771 1.00 30.25 ? 1    SER L C   1 
+      > ATOM   4    O O   . SER A 1 4   R -34.085 35.625  -60.167 1.00 30.37 ? 1    SER L O   1 
+      > ATOM   5    C CB  . SER A 1 4   R -33.117 33.414  -61.613 1.00 31.06 ? 1    SER L CB  1 
+      > ATOM   6    O OG  . SER A 1 4   R -33.170 32.694  -60.394 1.00 24.65 ? 1    SER L OG  1 
+      > ATOM   7    N N   . GLU A 1 5   Q -36.200 34.899  -60.456 1.00 29.35 ? 1    GLU L N   1 
+      > ATOM   8    C CA  . GLU A 1 5   Q -36.747 35.722  -59.382 1.00 29.58 ? 1    GLU L CA  1 
+      > ATOM   9    C C   . GLU A 1 5   Q -36.408 35.187  -57.993 1.00 27.19 ? 1    GLU L C   1 
+      > ATOM   10   O O   . GLU A 1 5   Q -36.603 34.009  -57.697 1.00 25.98 ? 1    GLU L O   1 
+      > ATOM   11   C CB  . GLU A 1 5   Q -38.268 35.843  -59.525 1.00 32.27 ? 1    GLU L CB  1 
+      > ATOM   12   C CG  . GLU A 1 5   Q -39.022 34.550  -59.270 1.00 39.28 ? 1    GLU L CG  1 
+      > ATOM   13   C CD  . GLU A 1 5   Q -40.524 34.704  -59.424 1.00 42.90 ? 1    GLU L CD  1 
+      > ATOM   14   O OE1 . GLU A 1 5   Q -41.092 35.645  -58.825 1.00 45.81 ? 1    GLU L OE1 1 
+      > ATOM   15   O OE2 . GLU A 1 5   Q -41.136 33.879  -60.137 1.00 45.28 ? 1    GLU L OE2 1 
+    pdb_id: 3B9F
+    asym_atoms:
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 1,L,A,1,,4,1R,SER,N,N,-34.407,34.815,-63.204,1.00,32.04
+      > 1,L,A,1,,4,1R,SER,CA,C,-34.478,34.039,-61.928,1.00,29.63
+      > 1,L,A,1,,4,1R,SER,C,C,-34.909,34.931,-60.771,1.00,30.25
+      > 1,L,A,1,,4,1R,SER,O,O,-34.085,35.625,-60.167,1.00,30.37
+      > 1,L,A,1,,4,1R,SER,CB,C,-33.117,33.414,-61.613,1.00,31.06
+      > 1,L,A,1,,4,1R,SER,OG,O,-33.170,32.694,-60.394,1.00,24.65
+      > 1,L,A,1,,5,1Q,GLU,N,N,-36.200,34.899,-60.456,1.00,29.35
+      > 1,L,A,1,,5,1Q,GLU,CA,C,-36.747,35.722,-59.382,1.00,29.58
+      > 1,L,A,1,,5,1Q,GLU,C,C,-36.408,35.187,-57.993,1.00,27.19
+      > 1,L,A,1,,5,1Q,GLU,O,O,-36.603,34.009,-57.697,1.00,25.98
+      > 1,L,A,1,,5,1Q,GLU,CB,C,-38.268,35.843,-59.525,1.00,32.27
+      > 1,L,A,1,,5,1Q,GLU,CG,C,-39.022,34.550,-59.270,1.00,39.28
+      > 1,L,A,1,,5,1Q,GLU,CD,C,-40.524,34.704,-59.424,1.00,42.90
+      > 1,L,A,1,,5,1Q,GLU,OE1,O,-41.092,35.645,-58.825,1.00,45.81
+      > 1,L,A,1,,5,1Q,GLU,OE2,O,-41.136,33.879,-60.137,1.00,45.28
     assembly_gen:
       > pl.DataFrame([
       >     dict(assembly_id='1', subchain_ids=['A'], oper_ids=[['1']]),
@@ -334,6 +408,7 @@ test_read_mmcif:
       > _atom_site.label_entity_id 
       > _atom_site.label_alt_id 
       > _atom_site.label_seq_id 
+      > _atom_site.auth_seq_id 
       > _atom_site.label_comp_id 
       > _atom_site.label_atom_id 
       > _atom_site.type_symbol 
@@ -342,17 +417,17 @@ test_read_mmcif:
       > _atom_site.Cartn_z 
       > _atom_site.occupancy 
       > _atom_site.B_iso_or_equiv 
-      > AAA A 1 . 1 GLY N  N -1.195  0.201 -0.206 1.00 0.00
-      > AAA A 1 . 1 GLY CA C  0.230  0.318 -0.502 1.00 0.00
-      > AAA A 1 . 1 GLY C  C  1.059 -0.390  0.542 1.00 0.00
-      > AAA A 1 . 1 GLY O  O  0.545 -0.975  1.499 1.00 0.00
+      > AAA A 1 . 1 1 GLY N  N -1.195  0.201 -0.206 1.00 0.00
+      > AAA A 1 . 1 1 GLY CA C  0.230  0.318 -0.502 1.00 0.00
+      > AAA A 1 . 1 1 GLY C  C  1.059 -0.390  0.542 1.00 0.00
+      > AAA A 1 . 1 1 GLY O  O  0.545 -0.975  1.499 1.00 0.00
     pdb_id: 9XYZ
     asym_atoms:
-      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > ,AAA,A,1,,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
-      > ,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
-      > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
-      > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > ,AAA,A,1,,1,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
     assembly_gen:
       > pl.DataFrame([
       >     dict(assembly_id='1', subchain_ids=['A', 'B'], oper_ids=[['1'], ['2']]),
@@ -382,6 +457,7 @@ test_read_mmcif:
       > _atom_site.label_entity_id 
       > _atom_site.label_alt_id 
       > _atom_site.label_seq_id 
+      > _atom_site.auth_seq_id 
       > _atom_site.label_comp_id 
       > _atom_site.label_atom_id 
       > _atom_site.type_symbol 
@@ -390,10 +466,10 @@ test_read_mmcif:
       > _atom_site.Cartn_z 
       > _atom_site.occupancy 
       > _atom_site.B_iso_or_equiv 
-      > AAA A 1 . 1 GLY N  N -1.195  0.201 -0.206 1.00 0.00
-      > AAA A 1 . 1 GLY CA C  0.230  0.318 -0.502 1.00 0.00
-      > AAA A 1 . 1 GLY C  C  1.059 -0.390  0.542 1.00 0.00
-      > AAA A 1 . 1 GLY O  O  0.545 -0.975  1.499 1.00 0.00
+      > AAA A 1 . 1 1 GLY N  N -1.195  0.201 -0.206 1.00 0.00
+      > AAA A 1 . 1 1 GLY CA C  0.230  0.318 -0.502 1.00 0.00
+      > AAA A 1 . 1 1 GLY C  C  1.059 -0.390  0.542 1.00 0.00
+      > AAA A 1 . 1 1 GLY O  O  0.545 -0.975  1.499 1.00 0.00
       > #
       > loop_
       > _entity.id 
@@ -421,11 +497,11 @@ test_read_mmcif:
       > A
     pdb_id: 9XYZ
     asym_atoms:
-      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > ,AAA,A,1,,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
-      > ,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
-      > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
-      > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > ,AAA,A,1,,1,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
+      > ,AAA,A,1,,1,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
     assembly_gen:
       > pl.DataFrame([
       >     dict(assembly_id='1', subchain_ids=['A'], oper_ids=[['1']]),
@@ -481,11 +557,11 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,AAA,A,1,,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
-      > 0,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
-      > 0,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
-      > 0,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,AAA,A,1,,1,,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
+      > 0,AAA,A,1,,1,,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
+      > 0,AAA,A,1,,1,,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
+      > 0,AAA,A,1,,1,,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
   -
     id: parse-model-6dze
     mmcif:
@@ -528,11 +604,11 @@ test_read_biological_assembly:
     model_id: 2
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,A,A,1,,1,GLY,N, N,5.942,3.401,2.220,1.00,0.00 
-      > 0,A,A,1,,1,GLY,CA,C,6.203,3.065,3.615,1.00,0.00 
-      > 0,A,A,1,,1,GLY,C, C,5.823,1.618,3.907,1.00,0.00 
-      > 0,A,A,1,,1,GLY,O, O,4.682,1.209,3.689,1.00,0.00 
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,1,1,GLY,N, N,5.942,3.401,2.220,1.00,0.00 
+      > 0,A,A,1,,1,1,GLY,CA,C,6.203,3.065,3.615,1.00,0.00 
+      > 0,A,A,1,,1,1,GLY,C, C,5.823,1.618,3.907,1.00,0.00 
+      > 0,A,A,1,,1,1,GLY,O, O,4.682,1.209,3.689,1.00,0.00 
   -
     id: parse-alt-loc-1fav
     mmcif:
@@ -557,9 +633,9 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,BBB,B,2,A,1,3PA,C1A,C, 8.927,8.112,76.619,0.50,60.83
-      > 0,BBB,B,2,B,1,3PA,C1A,C,12.166,8.592,73.991,0.50,62.56
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,BBB,B,2,A,1,,3PA,C1A,C, 8.927,8.112,76.619,0.50,60.83
+      > 0,BBB,B,2,B,1,,3PA,C1A,C,12.166,8.592,73.991,0.50,62.56
   -
     id: parse-missing-seq-id-5d8v
     mmcif:
@@ -604,21 +680,21 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,A,A,1,,43,CYS,N,N,19.548,21.174,2.193,1.00,2.42
-      > 0,A,A,1,,43,CYS,CA,C,18.915,21.622,3.425,1.00,2.35
-      > 0,A,A,1,,43,CYS,C,C,17.568,22.304,3.171,1.00,2.41
-      > 0,A,A,1,,43,CYS,O,O,16.649,22.179,3.981,1.00,2.70
-      > 0,A,A,1,,43,CYS,CB,C,19.835,22.572,4.185,1.00,2.55
-      > 0,A,A,1,,43,CYS,SG,S,21.395,21.804,4.744,1.00,2.51
-      > 0,A,B,2,,,SF4,FE1,FE,20.757,20.303,6.303,1.00,2.32
-      > 0,A,B,2,,,SF4,FE2,FE,18.705,18.673,7.122,1.00,2.31
-      > 0,A,B,2,,,SF4,FE3,FE,20.166,20.036,8.941,1.00,2.40
-      > 0,A,B,2,,,SF4,FE4,FE,21.284,17.975,7.559,1.00,2.33
-      > 0,A,B,2,,,SF4,S1,S,19.506,17.818,9.005,1.00,2.53
-      > 0,A,B,2,,,SF4,S2,S,22.247,20.032,7.934,1.00,2.47
-      > 0,A,B,2,,,SF4,S3,S,20.291,18.166,5.527,1.00,2.40
-      > 0,A,B,2,,,SF4,S4,S,18.833,20.972,7.390,1.00,2.46
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,43,43,CYS,N,N,19.548,21.174,2.193,1.00,2.42
+      > 0,A,A,1,,43,43,CYS,CA,C,18.915,21.622,3.425,1.00,2.35
+      > 0,A,A,1,,43,43,CYS,C,C,17.568,22.304,3.171,1.00,2.41
+      > 0,A,A,1,,43,43,CYS,O,O,16.649,22.179,3.981,1.00,2.70
+      > 0,A,A,1,,43,43,CYS,CB,C,19.835,22.572,4.185,1.00,2.55
+      > 0,A,A,1,,43,43,CYS,SG,S,21.395,21.804,4.744,1.00,2.51
+      > 0,A,B,2,,,84,SF4,FE1,FE,20.757,20.303,6.303,1.00,2.32
+      > 0,A,B,2,,,84,SF4,FE2,FE,18.705,18.673,7.122,1.00,2.31
+      > 0,A,B,2,,,84,SF4,FE3,FE,20.166,20.036,8.941,1.00,2.40
+      > 0,A,B,2,,,84,SF4,FE4,FE,21.284,17.975,7.559,1.00,2.33
+      > 0,A,B,2,,,84,SF4,S1,S,19.506,17.818,9.005,1.00,2.53
+      > 0,A,B,2,,,84,SF4,S2,S,22.247,20.032,7.934,1.00,2.47
+      > 0,A,B,2,,,84,SF4,S3,S,20.291,18.166,5.527,1.00,2.40
+      > 0,A,B,2,,,84,SF4,S4,S,18.833,20.972,7.390,1.00,2.46
   -
     id: parse-dna-atom-ids-1bna
     mmcif:
@@ -665,23 +741,23 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,A,A,1,,1,DC,O5',O,18.935,34.195,25.617,1.00,64.35
-      > 0,A,A,1,,1,DC,C5',C,19.130,33.921,24.219,1.00,44.69
-      > 0,A,A,1,,1,DC,C4',C,19.961,32.668,24.100,1.00,31.28
-      > 0,A,A,1,,1,DC,O4',O,19.360,31.583,24.852,1.00,37.45
-      > 0,A,A,1,,1,DC,C3',C,20.172,32.122,22.694,1.00,46.72
-      > 0,A,A,1,,1,DC,O3',O,21.350,31.325,22.681,1.00,48.89
-      > 0,A,A,1,,1,DC,C2',C,18.948,31.223,22.647,1.00,30.88
-      > 0,A,A,1,,1,DC,C1',C,19.231,30.482,23.944,1.00,36.58
-      > 0,A,A,1,,1,DC,N1, N,18.070,29.661,24.380,1.00,40.51
-      > 0,A,A,1,,1,DC,C2, C,18.224,28.454,25.015,1.00,16.62
-      > 0,A,A,1,,1,DC,O2, O,19.360,28.014,25.214,1.00,27.75
-      > 0,A,A,1,,1,DC,N3, N,17.143,27.761,25.377,1.00,20.55
-      > 0,A,A,1,,1,DC,C4, C,15.917,28.226,25.120,1.00,34.72
-      > 0,A,A,1,,1,DC,N4, N,14.828,27.477,25.444,1.00,40.31
-      > 0,A,A,1,,1,DC,C5, C,15.719,29.442,24.471,1.00,30.78
-      > 0,A,A,1,,1,DC,C6, C,16.843,30.171,24.101,1.00,25.90
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,1,1,DC,O5',O,18.935,34.195,25.617,1.00,64.35
+      > 0,A,A,1,,1,1,DC,C5',C,19.130,33.921,24.219,1.00,44.69
+      > 0,A,A,1,,1,1,DC,C4',C,19.961,32.668,24.100,1.00,31.28
+      > 0,A,A,1,,1,1,DC,O4',O,19.360,31.583,24.852,1.00,37.45
+      > 0,A,A,1,,1,1,DC,C3',C,20.172,32.122,22.694,1.00,46.72
+      > 0,A,A,1,,1,1,DC,O3',O,21.350,31.325,22.681,1.00,48.89
+      > 0,A,A,1,,1,1,DC,C2',C,18.948,31.223,22.647,1.00,30.88
+      > 0,A,A,1,,1,1,DC,C1',C,19.231,30.482,23.944,1.00,36.58
+      > 0,A,A,1,,1,1,DC,N1, N,18.070,29.661,24.380,1.00,40.51
+      > 0,A,A,1,,1,1,DC,C2, C,18.224,28.454,25.015,1.00,16.62
+      > 0,A,A,1,,1,1,DC,O2, O,19.360,28.014,25.214,1.00,27.75
+      > 0,A,A,1,,1,1,DC,N3, N,17.143,27.761,25.377,1.00,20.55
+      > 0,A,A,1,,1,1,DC,C4, C,15.917,28.226,25.120,1.00,34.72
+      > 0,A,A,1,,1,1,DC,N4, N,14.828,27.477,25.444,1.00,40.31
+      > 0,A,A,1,,1,1,DC,C5, C,15.719,29.442,24.471,1.00,30.78
+      > 0,A,A,1,,1,1,DC,C6, C,16.843,30.171,24.101,1.00,25.90
   -
     id: assembly-identity
     mmcif:
@@ -729,11 +805,11 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,AAA,A,1,,1,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
-      > 0,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
-      > 0,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
-      > 0,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,AAA,A,1,,1,,GLY,N, N,-1.195, 0.201,-0.206,1.00,0.00
+      > 0,AAA,A,1,,1,,GLY,CA,C, 0.230, 0.318,-0.502,1.00,0.00
+      > 0,AAA,A,1,,1,,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
+      > 0,AAA,A,1,,1,,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
   -
     id: assembly-exclude-subchain-2hwy
     mmcif:
@@ -802,14 +878,14 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,A,A,1,,3,PRO,N, N,-7.120,12.992,30.105,1.00,22.59
-      > 0,A,A,1,,3,PRO,CA,C,-6.938,12.689,28.680,1.00,22.52
-      > 0,A,A,1,,3,PRO,C, C,-5.550,12.160,28.374,1.00,22.25
-      > 0,A,A,1,,3,PRO,O, O,-4.577,12.637,28.948,1.00,21.65
-      > 0,A,A,1,,3,PRO,CB,C,-7.164,14.052,27.986,1.00,22.81
-      > 0,A,A,1,,3,PRO,CG,C,-6.899,15.087,29.029,1.00,22.19
-      > 0,A,A,1,,3,PRO,CD,C,-7.281,14.444,30.351,1.00,22.97
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,3,855,PRO,N, N,-7.120,12.992,30.105,1.00,22.59
+      > 0,A,A,1,,3,855,PRO,CA,C,-6.938,12.689,28.680,1.00,22.52
+      > 0,A,A,1,,3,855,PRO,C, C,-5.550,12.160,28.374,1.00,22.25
+      > 0,A,A,1,,3,855,PRO,O, O,-4.577,12.637,28.948,1.00,21.65
+      > 0,A,A,1,,3,855,PRO,CB,C,-7.164,14.052,27.986,1.00,22.81
+      > 0,A,A,1,,3,855,PRO,CG,C,-6.899,15.087,29.029,1.00,22.19
+      > 0,A,A,1,,3,855,PRO,CD,C,-7.281,14.444,30.351,1.00,22.97
   -
     id: assembly-2-fold-symmetry-4dza
     mmcif:
@@ -871,17 +947,17 @@ test_read_biological_assembly:
     model_id: 1
     assembly_id: 1
     expected:
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,A,A,1,,399,ALA,N,N,-17.343,-4.234,-0.815,1.00,16.39
-      > 0,A,A,1,,399,ALA,CA,C,-17.982,-2.923,-0.508,1.00,19.33
-      > 0,A,A,1,,399,ALA,C,C,-18.227,-2.015,-1.713,1.00,19.35
-      > 0,A,A,1,,399,ALA,O,O,-19.051,-1.064,-1.630,1.00,17.35
-      > 0,A,A,1,,399,ALA,CB,C,-17.157,-2.198, 0.554,1.00,19.91
-      > 1,A,A,1,,399,ALA,N,N,-17.343,4.234,0.815,1.00,16.39
-      > 1,A,A,1,,399,ALA,CA,C,-17.982,2.923,0.508,1.00,19.33
-      > 1,A,A,1,,399,ALA,C,C,-18.227,2.015,1.713,1.00,19.35
-      > 1,A,A,1,,399,ALA,O,O,-19.051,1.064,1.630,1.00,17.35
-      > 1,A,A,1,,399,ALA,CB,C,-17.157,2.198,-0.554,1.00,19.91
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,399,399,ALA,N,N,-17.343,-4.234,-0.815,1.00,16.39
+      > 0,A,A,1,,399,399,ALA,CA,C,-17.982,-2.923,-0.508,1.00,19.33
+      > 0,A,A,1,,399,399,ALA,C,C,-18.227,-2.015,-1.713,1.00,19.35
+      > 0,A,A,1,,399,399,ALA,O,O,-19.051,-1.064,-1.630,1.00,17.35
+      > 0,A,A,1,,399,399,ALA,CB,C,-17.157,-2.198, 0.554,1.00,19.91
+      > 1,A,A,1,,399,399,ALA,N,N,-17.343,4.234,0.815,1.00,16.39
+      > 1,A,A,1,,399,399,ALA,CA,C,-17.982,2.923,0.508,1.00,19.33
+      > 1,A,A,1,,399,399,ALA,C,C,-18.227,2.015,1.713,1.00,19.35
+      > 1,A,A,1,,399,399,ALA,O,O,-19.051,1.064,1.630,1.00,17.35
+      > 1,A,A,1,,399,399,ALA,CB,C,-17.157,2.198,-0.554,1.00,19.91
   -
     id: assembly-3-fold-symmetry-1fav
     mmcif:
@@ -942,10 +1018,10 @@ test_read_biological_assembly:
       # PyMOL> set assembly, 1
       # PyMOL> fetch 1fav
       # PyMOL> iterate_state 0, /1fav/A/A/69/CA, print(f'{x:.5f},{y:.5f},{z:.5f}')
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0,A,A,1,,69,ILE,CA,C,15.45100, 7.29500,87.15000,1.0,21.29
-      > 1,A,A,1,,69,ILE,CA,C,21.77584, 9.73346,87.15000,1.0,21.29
-      > 2,A,A,1,,69,ILE,CA,C,16.50166,13.99171,87.15000,1.0,21.29
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,69,69,ILE,CA,C,15.45100, 7.29500,87.15000,1.0,21.29
+      > 1,A,A,1,,69,69,ILE,CA,C,21.77584, 9.73346,87.15000,1.0,21.29
+      > 2,A,A,1,,69,69,ILE,CA,C,16.50166,13.99171,87.15000,1.0,21.29
   -
     id: assembly-oper-expr-2gtl
     mmcif:
@@ -1038,31 +1114,31 @@ test_read_biological_assembly:
       # PyMOL> set assembly, 4
       # PyMOL> fetch 2gtl
       # PyMOL> iterate_state 0, A/5/N, print(f'{x:.5f},{y:.5f},{z:.5f}')
-      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 0, A,A,1,,5,ASP,N,N, 13.71300, 113.01200,  45.19300,1.0,121.78
-      > 1, A,A,1,,5,ASP,N,N, 32.42905,  16.85502, 117.85889,1.0,121.78
-      > 2, A,A,1,,5,ASP,N,N, 37.02883, -95.43150,  70.45247,1.0,121.78
-      > 3, A,A,1,,5,ASP,N,N, 22.91258,-111.56103, -49.61983,1.0,121.78
-      > 4, A,A,1,,5,ASP,N,N,  4.19654, -15.40403,-122.28573,1.0,121.78
-      > 5, A,A,1,,5,ASP,N,N, -0.40325,  96.88247, -74.87930,1.0,121.78
-      > 6, A,A,1,,5,ASP,N,N,-24.64969, 111.93362,  43.49203,1.0,121.78
-      > 7, A,A,1,,5,ASP,N,N,-37.95778,  88.82079, -75.52679,1.0,121.78
-      > 8, A,A,1,,5,ASP,N,N,-32.26153, -25.96664,-116.37023,1.0,121.78
-      > 9, A,A,1,,5,ASP,N,N,-13.25720,-117.64124, -38.19486,1.0,121.78
-      > 10,A,A,1,,5,ASP,N,N,  0.05088, -94.52843,  80.82397,1.0,121.78
-      > 11,A,A,1,,5,ASP,N,N, -5.64536,  20.25901, 121.66740,1.0,121.78
-      > 12,A,A,1,,5,ASP,N,N, 94.15720, 244.34586, 256.72101,1.0,121.78
-      > 13,A,A,1,,5,ASP,N,N, 99.67459, 149.36702, 333.04425,1.0,121.78
-      > 14,A,A,1,,5,ASP,N,N, 87.51498,  35.85008, 290.11710,1.0,121.78
-      > 15,A,A,1,,5,ASP,N,N, 69.83799,  17.31198, 170.86671,1.0,121.78
-      > 16,A,A,1,,5,ASP,N,N, 64.32060, 112.29082,  94.54346,1.0,121.78
-      > 17,A,A,1,,5,ASP,N,N, 76.48021, 225.80774, 137.47061,1.0,121.78
-      > 18,A,A,1,,5,ASP,N,N, 56.02167, 248.74939, 255.28951,1.0,121.78
-      > 19,A,A,1,,5,ASP,N,N, 38.15129, 223.23032, 137.36487,1.0,121.78
-      > 20,A,A,1,,5,ASP,N,N, 26.79245, 107.33518, 101.08846,1.0,121.78
-      > 21,A,A,1,,5,ASP,N,N, 33.30398,  16.95912, 182.73669,1.0,121.78
-      > 22,A,A,1,,5,ASP,N,N, 51.17435,  42.47820, 300.66132,1.0,121.78
-      > 23,A,A,1,,5,ASP,N,N, 62.53320, 158.37332, 336.93774,1.0,121.78
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0, A,A,1,,5,5,ASP,N,N, 13.71300, 113.01200,  45.19300,1.0,121.78
+      > 1, A,A,1,,5,5,ASP,N,N, 32.42905,  16.85502, 117.85889,1.0,121.78
+      > 2, A,A,1,,5,5,ASP,N,N, 37.02883, -95.43150,  70.45247,1.0,121.78
+      > 3, A,A,1,,5,5,ASP,N,N, 22.91258,-111.56103, -49.61983,1.0,121.78
+      > 4, A,A,1,,5,5,ASP,N,N,  4.19654, -15.40403,-122.28573,1.0,121.78
+      > 5, A,A,1,,5,5,ASP,N,N, -0.40325,  96.88247, -74.87930,1.0,121.78
+      > 6, A,A,1,,5,5,ASP,N,N,-24.64969, 111.93362,  43.49203,1.0,121.78
+      > 7, A,A,1,,5,5,ASP,N,N,-37.95778,  88.82079, -75.52679,1.0,121.78
+      > 8, A,A,1,,5,5,ASP,N,N,-32.26153, -25.96664,-116.37023,1.0,121.78
+      > 9, A,A,1,,5,5,ASP,N,N,-13.25720,-117.64124, -38.19486,1.0,121.78
+      > 10,A,A,1,,5,5,ASP,N,N,  0.05088, -94.52843,  80.82397,1.0,121.78
+      > 11,A,A,1,,5,5,ASP,N,N, -5.64536,  20.25901, 121.66740,1.0,121.78
+      > 12,A,A,1,,5,5,ASP,N,N, 94.15720, 244.34586, 256.72101,1.0,121.78
+      > 13,A,A,1,,5,5,ASP,N,N, 99.67459, 149.36702, 333.04425,1.0,121.78
+      > 14,A,A,1,,5,5,ASP,N,N, 87.51498,  35.85008, 290.11710,1.0,121.78
+      > 15,A,A,1,,5,5,ASP,N,N, 69.83799,  17.31198, 170.86671,1.0,121.78
+      > 16,A,A,1,,5,5,ASP,N,N, 64.32060, 112.29082,  94.54346,1.0,121.78
+      > 17,A,A,1,,5,5,ASP,N,N, 76.48021, 225.80774, 137.47061,1.0,121.78
+      > 18,A,A,1,,5,5,ASP,N,N, 56.02167, 248.74939, 255.28951,1.0,121.78
+      > 19,A,A,1,,5,5,ASP,N,N, 38.15129, 223.23032, 137.36487,1.0,121.78
+      > 20,A,A,1,,5,5,ASP,N,N, 26.79245, 107.33518, 101.08846,1.0,121.78
+      > 21,A,A,1,,5,5,ASP,N,N, 33.30398,  16.95912, 182.73669,1.0,121.78
+      > 22,A,A,1,,5,5,ASP,N,N, 51.17435,  42.47820, 300.66132,1.0,121.78
+      > 23,A,A,1,,5,5,ASP,N,N, 62.53320, 158.37332, 336.93774,1.0,121.78
   -
     id: err-unknown-assembly
     mmcif:
@@ -1194,19 +1270,19 @@ test_read_asymmetric_unit:
       > ATOM   590  O O    . GLY A 1 1  ? 9.929   0.468  0.705   1.00 0.00 ? 1  GLY A O    3  
     # include all models
     expected:
-      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 1,A,A,1,,1,GLY,N, N,7.443,2.693,-0.227,1.00,0.00 
-      > 1,A,A,1,,1,GLY,CA,C,7.583,3.413, 1.035,1.00,0.00 
-      > 1,A,A,1,,1,GLY,C, C,7.765,2.443, 2.197,1.00,0.00 
-      > 1,A,A,1,,1,GLY,O, O,8.884,2.044, 2.516,1.00,0.00 
-      > 2,A,A,1,,1,GLY,N, N,5.942,3.401, 2.220,1.00,0.00 
-      > 2,A,A,1,,1,GLY,CA,C,6.203,3.065, 3.615,1.00,0.00 
-      > 2,A,A,1,,1,GLY,C, C,5.823,1.618, 3.907,1.00,0.00 
-      > 2,A,A,1,,1,GLY,O, O,4.682,1.209, 3.689,1.00,0.00 
-      > 3,A,A,1,,1,GLY,N, N,7.919,2.798, 0.980,1.00,0.00 
-      > 3,A,A,1,,1,GLY,CA,C,9.331,2.705, 1.337,1.00,0.00 
-      > 3,A,A,1,,1,GLY,C, C,9.724,1.260, 1.625,1.00,0.00 
-      > 3,A,A,1,,1,GLY,O, O,9.929,0.468, 0.705,1.00,0.00 
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 1,A,A,1,,1,1,GLY,N, N,7.443,2.693,-0.227,1.00,0.00 
+      > 1,A,A,1,,1,1,GLY,CA,C,7.583,3.413, 1.035,1.00,0.00 
+      > 1,A,A,1,,1,1,GLY,C, C,7.765,2.443, 2.197,1.00,0.00 
+      > 1,A,A,1,,1,1,GLY,O, O,8.884,2.044, 2.516,1.00,0.00 
+      > 2,A,A,1,,1,1,GLY,N, N,5.942,3.401, 2.220,1.00,0.00 
+      > 2,A,A,1,,1,1,GLY,CA,C,6.203,3.065, 3.615,1.00,0.00 
+      > 2,A,A,1,,1,1,GLY,C, C,5.823,1.618, 3.907,1.00,0.00 
+      > 2,A,A,1,,1,1,GLY,O, O,4.682,1.209, 3.689,1.00,0.00 
+      > 3,A,A,1,,1,1,GLY,N, N,7.919,2.798, 0.980,1.00,0.00 
+      > 3,A,A,1,,1,1,GLY,CA,C,9.331,2.705, 1.337,1.00,0.00 
+      > 3,A,A,1,,1,1,GLY,C, C,9.724,1.260, 1.625,1.00,0.00 
+      > 3,A,A,1,,1,1,GLY,O, O,9.929,0.468, 0.705,1.00,0.00 
   -
     id: assembly-2hwy
     mmcif:
@@ -1274,21 +1350,21 @@ test_read_asymmetric_unit:
       > ATOM 928  C CD  . PRO B 1 3   ? 35.452  19.972 10.888 1.00 29.19 ? 855  PRO B CD  1 
     # include all assemblies
     expected:
-      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > 1,A,A,1,,3,PRO,N ,N,-7.120,12.992,30.105,1.00,22.59
-      > 1,A,A,1,,3,PRO,CA,C,-6.938,12.689,28.680,1.00,22.52
-      > 1,A,A,1,,3,PRO,C ,C,-5.550,12.160,28.374,1.00,22.25
-      > 1,A,A,1,,3,PRO,O ,O,-4.577,12.637,28.948,1.00,21.65
-      > 1,A,A,1,,3,PRO,CB,C,-7.164,14.052,27.986,1.00,22.81
-      > 1,A,A,1,,3,PRO,CG,C,-6.899,15.087,29.029,1.00,22.19
-      > 1,A,A,1,,3,PRO,CD,C,-7.281,14.444,30.351,1.00,22.97
-      > 1,B,B,1,,3,PRO,N ,N,36.367,20.784,11.706,1.00,29.02
-      > 1,B,B,1,,3,PRO,CA,C,36.240,22.206,11.403,1.00,28.91
-      > 1,B,B,1,,3,PRO,C ,C,35.314,22.952,12.394,1.00,28.90
-      > 1,B,B,1,,3,PRO,O ,O,35.052,22.440,13.501,1.00,29.18
-      > 1,B,B,1,,3,PRO,CB,C,35.676,22.207,9.963 ,1.00,29.03
-      > 1,B,B,1,,3,PRO,CG,C,35.376,20.735,9.606 ,1.00,28.79
-      > 1,B,B,1,,3,PRO,CD,C,35.452,19.972,10.888,1.00,29.19
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 1,A,A,1,,3,855,PRO,N ,N,-7.120,12.992,30.105,1.00,22.59
+      > 1,A,A,1,,3,855,PRO,CA,C,-6.938,12.689,28.680,1.00,22.52
+      > 1,A,A,1,,3,855,PRO,C ,C,-5.550,12.160,28.374,1.00,22.25
+      > 1,A,A,1,,3,855,PRO,O ,O,-4.577,12.637,28.948,1.00,21.65
+      > 1,A,A,1,,3,855,PRO,CB,C,-7.164,14.052,27.986,1.00,22.81
+      > 1,A,A,1,,3,855,PRO,CG,C,-6.899,15.087,29.029,1.00,22.19
+      > 1,A,A,1,,3,855,PRO,CD,C,-7.281,14.444,30.351,1.00,22.97
+      > 1,B,B,1,,3,855,PRO,N ,N,36.367,20.784,11.706,1.00,29.02
+      > 1,B,B,1,,3,855,PRO,CA,C,36.240,22.206,11.403,1.00,28.91
+      > 1,B,B,1,,3,855,PRO,C ,C,35.314,22.952,12.394,1.00,28.90
+      > 1,B,B,1,,3,855,PRO,O ,O,35.052,22.440,13.501,1.00,29.18
+      > 1,B,B,1,,3,855,PRO,CB,C,35.676,22.207,9.963 ,1.00,29.03
+      > 1,B,B,1,,3,855,PRO,CG,C,35.376,20.735,9.606 ,1.00,28.79
+      > 1,B,B,1,,3,855,PRO,CD,C,35.452,19.972,10.888,1.00,29.19
   -
     id: occupancy-clip
     mmcif:
@@ -1313,11 +1389,11 @@ test_read_asymmetric_unit:
       > AAA A 1 . 1 GLY C  C  1.059 -0.390  0.542  1.00 0.00
       > AAA A 1 . 1 GLY O  O  0.545 -0.975  1.499  2.00 0.00
     expected:
-      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,comp_id,atom_id,element,x,y,z,occupancy,b_factor
-      > ,AAA,A,1,,1,GLY,N, N,-1.195, 0.201,-0.206,0.00,0.00
-      > ,AAA,A,1,,1,GLY,CA,C, 0.230, 0.318,-0.502,0.00,0.00
-      > ,AAA,A,1,,1,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
-      > ,AAA,A,1,,1,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
+      > model_id,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > ,AAA,A,1,,1,,GLY,N, N,-1.195, 0.201,-0.206,0.00,0.00
+      > ,AAA,A,1,,1,,GLY,CA,C, 0.230, 0.318,-0.502,0.00,0.00
+      > ,AAA,A,1,,1,,GLY,C, C, 1.059,-0.390, 0.542,1.00,0.00
+      > ,AAA,A,1,,1,,GLY,O, O, 0.545,-0.975, 1.499,1.00,0.00
 
 test_parse_oper_expression:
   -
