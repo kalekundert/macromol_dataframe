@@ -455,7 +455,10 @@ def _extract_struct_assembly_gen(cif, asym_atoms):
         struct_assembly_gen = pl.DataFrame([
             dict(
                 assembly_id='1',
-                subchain_ids=asym_atoms['subchain_id'].unique(),
+                # The `to_list()` call is necessary because old versions of 
+                # polars fail to successfully infer that this column should 
+                # have dtype `List[String]`, not `Object`.
+                subchain_ids=asym_atoms['subchain_id'].unique().to_list(),
                 oper_ids=[['1']],
             ),
         ])
