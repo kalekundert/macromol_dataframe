@@ -2,6 +2,33 @@
 
 
 
+## v0.5.0 (2024-12-09)
+
+### Chore
+
+* chore: fix upload of coverage artifacts ([`d12422f`](https://github.com/kalekundert/macromol_dataframe/commit/d12422ff0869cff5aed4b057d4f0ab0d48103fe7))
+
+### Feature
+
+* feat: parse non-sequential residue &#34;indices&#34;
+
+mmCIF files can specify residue indices that are not sequential.  The
+purpose of these indices is to allow canonical residue numbers to be
+used for whole families of proteins that may differ in their exact
+sequences.  The non-sequential indices are specified by both the
+`auth_seq_id` (author sequence id) and `pdbx_PDB_ins_code` (insertion
+code) fields.
+
+I made the decision that these fields are only useful together, so
+there&#39;s no point in providing them separately. ([`d7a38e5`](https://github.com/kalekundert/macromol_dataframe/commit/d7a38e5bbcdde96297c387d371a35ba83dd81dd3))
+
+* feat: parse the `_entity_poly` table ([`41d0ebb`](https://github.com/kalekundert/macromol_dataframe/commit/41d0ebb17be0b57047d7e6f49be6f94c6244905b))
+
+### Fix
+
+* fix: help old versions of polars infer column dtype ([`0f59dcc`](https://github.com/kalekundert/macromol_dataframe/commit/0f59dcc7cc5564218261be80a99740be6d5ce743))
+
+
 ## v0.4.0 (2024-07-06)
 
 ### Feature
