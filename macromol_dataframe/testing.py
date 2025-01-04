@@ -46,6 +46,7 @@ def atoms_fwf(params):
             col_aliases={
                 'chain': 'chain_id',
                 'subchain': 'subchain_id',
+                'segi': 'subchain_id',
                 'resn': 'comp_id',
                 'resi': 'seq_id',
                 'atom': 'atom_id',
