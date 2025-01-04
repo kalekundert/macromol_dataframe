@@ -2,6 +2,13 @@
 
 
 
+## v0.6.0 (2025-01-04)
+
+### Feature
+
+* feat: add a segi column alias ([`b93e41e`](https://github.com/kalekundert/macromol_dataframe/commit/b93e41ebf7258ac0b88a1b25d7beb66c8bceccba))
+
+
 ## v0.5.0 (2024-12-09)
 
 ### Chore
