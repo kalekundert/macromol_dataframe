@@ -2,7 +2,7 @@
 Manipulate macromolecular coordinate data using data frames.
 """
 
-__version__ = '0.6.0'
+__version__ = '0.7.0'
 
 from .mmcif import *
 from .pymol import *

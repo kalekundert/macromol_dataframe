@@ -2,6 +2,15 @@
 
 
 
+## v0.7.0 (2025-02-10)
+
+### Feature
+
+* feat: support python 3.8
+
+The rosetta docker image still uses python 3.8, so I need to support it. ([`c6958d3`](https://github.com/kalekundert/macromol_dataframe/commit/c6958d323613f2b7c50ca09ec83782ad07c03aca))
+
+
 ## v0.6.0 (2025-01-04)
 
 ### Feature
