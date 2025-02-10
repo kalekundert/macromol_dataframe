@@ -4,8 +4,8 @@ from .coords import (
         Coords3, Coords4, Frame, transform_coords, homogenize_coords,
 )
 
-
-from typing import TypeAlias
+from typing import Union
+from typing_extensions import TypeAlias
 
 Atoms: TypeAlias = pl.DataFrame
 
@@ -51,11 +51,11 @@ def get_atom_coords(
         atoms: Atoms,
         *,
         homogeneous: bool=False,
-) -> Coords3 | Coords4:
+) -> Union[Coords3, Coords4]:
     coords = atoms.select('x', 'y', 'z').to_numpy()
     return homogenize_coords(coords) if homogeneous else coords
 
-def replace_atom_coords(atoms: Atoms, coords: Coords3 | Coords4):
+def replace_atom_coords(atoms: Atoms, coords: Union[Coords3, Coords4]):
     return (
             atoms.with_columns(
                 x=coords[:,0],

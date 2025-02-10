@@ -2,7 +2,8 @@ import numpy as np
 
 from scipy.spatial.transform import Rotation
 from numpy.typing import NDArray
-from typing import TypeAlias, Annotated, Optional
+from typing import Optional
+from typing_extensions import TypeAlias, Annotated
 
 """\
 Naming conventions

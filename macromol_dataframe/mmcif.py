@@ -16,10 +16,12 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
+from typing import Dict, Union
+
 class Structure:
     asym_atoms: Atoms
     assembly_gen: pl.DataFrame
-    oper_map: dict[str, Frame]
+    oper_map: Dict[str, Frame]
     entities: pl.DataFrame
 
     def __init__(self, id):
@@ -246,7 +248,7 @@ def select_model(asym_atoms: Atoms, model_id: str) -> Atoms:
 def make_biological_assembly(
         asym_atoms: Atoms,
         struct_assembly_gen: pl.DataFrame,
-        struct_oper_map: dict[str, Frame],
+        struct_oper_map: Dict[str, Frame],
         assembly_id: str,
 ) -> Atoms:
     bio_opers = (
@@ -285,7 +287,7 @@ def make_biological_assembly(
 
     return pl.concat(bio_atoms).rechunk()
 
-def get_pdb_path(pdb_dir: Path | str, pdb_id: str, suffix: str = '.cif.gz'):
+def get_pdb_path(pdb_dir: Union[Path, str], pdb_id: str, suffix: str = '.cif.gz'):
     """
     Return the path to a mmCIF file identified by a PDB id, assuming that the 
     file is stored in a directory matching the structure of the PDB itself.
@@ -552,7 +554,7 @@ def _parse_oper_expression(expr: str):
         err2.blame = [str(err1)]
         raise err2
 
-@functools.cache
+@functools.lru_cache(maxsize=None)
 def _make_oper_expression_parser():
     from parsy import generate, string, regex
 
