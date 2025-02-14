@@ -1,9 +1,13 @@
 import numpy as np
 
 from scipy.spatial.transform import Rotation
-from numpy.typing import NDArray
 from typing import Optional
 from typing_extensions import TypeAlias, Annotated
+
+try:
+    from numpy.typing import NDArray
+except ImportError:
+    NDArray = {float: np.ndarray}
 
 """\
 Naming conventions
