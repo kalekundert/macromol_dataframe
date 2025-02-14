@@ -2,6 +2,13 @@
 
 
 
+## v0.8.0 (2025-02-14)
+
+### Feature
+
+* feat: support numpy&lt;1.20 ([`b6cb73d`](https://github.com/kalekundert/macromol_dataframe/commit/b6cb73dfb20f2db752e8c3c3bbaef517b2e86b80))
+
+
 ## v0.7.0 (2025-02-10)
 
 ### Feature
