@@ -2,6 +2,13 @@
 
 
 
+## v0.8.1 (2025-02-15)
+
+### Fix
+
+* fix: add more-itertools dependency ([`b8a0ead`](https://github.com/kalekundert/macromol_dataframe/commit/b8a0eadac36bdec53ae10366c46019cd5b0276fb))
+
+
 ## v0.8.0 (2025-02-14)
 
 ### Feature
