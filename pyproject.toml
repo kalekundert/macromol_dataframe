@@ -15,6 +15,7 @@ classifiers = [
 ]
 dependencies = [
     'gemmi',
+    'more_itertools',
     'numpy',
     'parsy',
     'polars>=1.0',
