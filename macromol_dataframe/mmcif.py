@@ -92,7 +92,7 @@ def read_biological_assembly(
         this dataframe.
 
     It is assumed that the caller already knows something about the file in 
-    questions, namely (i) which assembly is of interest and (ii) which model is 
+    question, namely (i) which assembly is of interest and (ii) which model is 
     of interest.  For example, this information might come from a separate 
     program that scans the PDB and identifies assemblies of interest.  If you 
     don't have this information in advance, and you want to work it out from 
