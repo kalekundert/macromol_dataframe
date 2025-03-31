@@ -266,11 +266,12 @@ def make_biological_assembly(
         raise err
 
     bio_atoms = []
+    symmetry_mate = 0
 
     for row in bio_opers.iter_rows(named=True):
         subchain_ids = row['subchain_ids']
 
-        for i, oper_ids in enumerate(row['oper_ids']):
+        for oper_ids in row['oper_ids']:
             frame = reduce(op.matmul, (struct_oper_map[x] for x in oper_ids))
             sym_atoms = (
                     transform_atom_coords(
@@ -280,9 +281,11 @@ def make_biological_assembly(
                         frame,
                     )
                     .with_columns(
-                        symmetry_mate=pl.lit(i),
+                        symmetry_mate=pl.lit(symmetry_mate),
                     )
             )
+            symmetry_mate += 1
+
             bio_atoms.append(sym_atoms)
 
     return pl.concat(bio_atoms).rechunk()

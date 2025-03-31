@@ -1140,6 +1140,90 @@ test_read_biological_assembly:
       > 22,A,A,1,,5,5,ASP,N,N, 51.17435,  42.47820, 300.66132,1.0,121.78
       > 23,A,A,1,,5,5,ASP,N,N, 62.53320, 158.37332, 336.93774,1.0,121.78
   -
+    id: assembly-oper-expr-unrolled-6pzd
+    # This structure exposed a bug where the symmetry mate id would be assigned 
+    # correctly if the `oper_expression` was given as `1-4`, but not if it was 
+    # broken into 4 separate lines.
+    mmcif:
+      > data_6PZD
+      > # 
+      > loop_
+      > _pdbx_struct_assembly_gen.assembly_id 
+      > _pdbx_struct_assembly_gen.oper_expression 
+      > _pdbx_struct_assembly_gen.asym_id_list 
+      > 1 1 A,B,C,D,E,F,G,H,I,J,K 
+      > 1 2 A,B,C,D,E,F,G,H,I,J,K 
+      > 1 3 A,B,C,D,E,F,G,H,I,J,K 
+      > 1 4 A,B,C,D,E,F,G,H,I,J,K 
+      > # 
+      > loop_
+      > _pdbx_struct_oper_list.id 
+      > _pdbx_struct_oper_list.type 
+      > _pdbx_struct_oper_list.name 
+      > _pdbx_struct_oper_list.symmetry_operation 
+      > _pdbx_struct_oper_list.matrix[1][1] 
+      > _pdbx_struct_oper_list.matrix[1][2] 
+      > _pdbx_struct_oper_list.matrix[1][3] 
+      > _pdbx_struct_oper_list.vector[1] 
+      > _pdbx_struct_oper_list.matrix[2][1] 
+      > _pdbx_struct_oper_list.matrix[2][2] 
+      > _pdbx_struct_oper_list.matrix[2][3] 
+      > _pdbx_struct_oper_list.vector[2] 
+      > _pdbx_struct_oper_list.matrix[3][1] 
+      > _pdbx_struct_oper_list.matrix[3][2] 
+      > _pdbx_struct_oper_list.matrix[3][3] 
+      > _pdbx_struct_oper_list.vector[3] 
+      > 1 'identity operation'         1_555  x,y,z   1.0000000000  0.0000000000 0.0000000000  0.0000000000 0.0000000000 1.0000000000 
+      > 0.0000000000 0.0000000000 0.0000000000  0.0000000000 1.0000000000  0.0000000000 
+      > 2 'crystal symmetry operation' 3_555  -x,y,-z -1.0000000000 0.0000000000 0.0000000000  0.0000000000 0.0000000000 1.0000000000 
+      > 0.0000000000 0.0000000000 0.0000000000  0.0000000000 -1.0000000000 0.0000000000 
+      > 3 'crystal symmetry operation' 21_555 z,y,-x  0.0000000000  0.0000000000 1.0000000000  0.0000000000 0.0000000000 1.0000000000 
+      > 0.0000000000 0.0000000000 -1.0000000000 0.0000000000 0.0000000000  0.0000000000 
+      > 4 'crystal symmetry operation' 23_555 -z,y,x  0.0000000000  0.0000000000 -1.0000000000 0.0000000000 0.0000000000 1.0000000000 
+      > 0.0000000000 0.0000000000 1.0000000000  0.0000000000 0.0000000000  0.0000000000 
+      > # 
+      > loop_
+      > _atom_site.group_PDB 
+      > _atom_site.id 
+      > _atom_site.type_symbol 
+      > _atom_site.label_atom_id 
+      > _atom_site.label_alt_id 
+      > _atom_site.label_comp_id 
+      > _atom_site.label_asym_id 
+      > _atom_site.label_entity_id 
+      > _atom_site.label_seq_id 
+      > _atom_site.pdbx_PDB_ins_code 
+      > _atom_site.Cartn_x 
+      > _atom_site.Cartn_y 
+      > _atom_site.Cartn_z 
+      > _atom_site.occupancy 
+      > _atom_site.B_iso_or_equiv 
+      > _atom_site.pdbx_formal_charge 
+      > _atom_site.auth_seq_id 
+      > _atom_site.auth_comp_id 
+      > _atom_site.auth_asym_id 
+      > _atom_site.auth_atom_id 
+      > _atom_site.pdbx_PDB_model_num 
+      > ATOM   1    N  N    . ARG A 1 5   ? 5.561   -29.302 -10.725 1.00 45.98 ? 81   ARG A N    1 
+      > ATOM   2    C  CA   . ARG A 1 5   ? 6.543   -28.737 -9.805  1.00 45.47 ? 81   ARG A CA   1 
+      > ATOM   3    C  C    . ARG A 1 5   ? 7.934   -29.296 -10.096 1.00 39.48 ? 81   ARG A C    1 
+    model_id: 1
+    assembly_id: 1
+    expected:
+      > symmetry_mate,chain_id,subchain_id,entity_id,alt_id,seq_id,seq_label,comp_id,atom_id,element,x,y,z,occupancy,b_factor
+      > 0,A,A,1,,5,81,ARG,N,N,5.561,-29.302,-10.725,1.00,45.98
+      > 0,A,A,1,,5,81,ARG,CA,C,6.543,-28.737,-9.805,1.00,45.47
+      > 0,A,A,1,,5,81,ARG,C,C,7.934,-29.296,-10.096,1.00,39.48
+      > 1,A,A,1,,5,81,ARG,N,N,-5.561,-29.302,10.725,1.00,45.98
+      > 1,A,A,1,,5,81,ARG,CA,C,-6.543,-28.737,9.805,1.00,45.47
+      > 1,A,A,1,,5,81,ARG,C,C,-7.934,-29.296,10.096,1.00,39.48
+      > 2,A,A,1,,5,81,ARG,N,N,-10.725,-29.302,-5.561,1.00,45.98
+      > 2,A,A,1,,5,81,ARG,CA,C,-9.805,-28.737,-6.543,1.00,45.47
+      > 2,A,A,1,,5,81,ARG,C,C,-10.096,-29.296,-7.934,1.00,39.48
+      > 3,A,A,1,,5,81,ARG,N,N,10.725,-29.302,5.561,1.00,45.98
+      > 3,A,A,1,,5,81,ARG,CA,C,9.805,-28.737,6.543,1.00,45.47
+      > 3,A,A,1,,5,81,ARG,C,C,10.096,-29.296,7.934,1.00,39.48
+  -
     id: err-unknown-assembly
     mmcif:
       > data_9XYZ
