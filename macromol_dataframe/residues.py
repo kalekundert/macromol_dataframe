@@ -1,6 +1,6 @@
 import polars as pl
 
-def assign_residue_ids(atoms, drop_null_ids=True):
+def assign_residue_ids(atoms, *, drop_null_ids=True, maintain_order=False):
     """
     Assign a unique numeric identifier to each residue.
 
@@ -49,7 +49,7 @@ def assign_residue_ids(atoms, drop_null_ids=True):
 
     return (
             atoms
-            .group_by(id_cols)
+            .group_by(id_cols, maintain_order=maintain_order)
             .agg(atom_cols=pl.struct(pl.col('*')))
             .with_row_index('residue_id')
             .explode('atom_cols')
@@ -86,6 +86,12 @@ def explode_residue_conformations(atoms, id_name='alt_id'):
     for each different conformation the residue can adopt, then giving the 
     appropriate alternate id to each copy.
     """
+
+    # This logic fails for empty inputs, due to pola-rs/polars#22006.  
+    # Fortunately, it's easy to work around this.
+    if atoms.is_empty():
+        return atoms.with_columns(pl.col('alt_id').alias(id_name))
+
     return (
             atoms
             .lazy()
