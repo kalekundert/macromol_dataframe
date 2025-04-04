@@ -53,7 +53,7 @@ def assign_residue_ids(atoms, *, drop_null_ids=True, maintain_order=False):
             .agg(atom_cols=pl.struct(pl.col('*')))
             .with_row_index('residue_id')
             .explode('atom_cols')
-            .select('residue_id', pl.col('atom_cols').struct.unnest())
+            .select('residue_id', pl.col('atom_cols').struct.field('*'))
             .collect()
     )
 
