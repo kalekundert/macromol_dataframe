@@ -2,6 +2,25 @@
 
 
 
+## v0.9.0 (2025-04-04)
+
+### Documentation
+
+* docs: fix typo ([`c8d995e`](https://github.com/kalekundert/macromol_dataframe/commit/c8d995e2bbbcd7f164182a28a318534c06009e09))
+
+### Feature
+
+* feat: make residue ids (optionally) deterministic ([`33d456a`](https://github.com/kalekundert/macromol_dataframe/commit/33d456aad54e6f99cb3ed53c2824515cb81262ae))
+
+* feat: add some functions for working with residues ([`2c48dd4`](https://github.com/kalekundert/macromol_dataframe/commit/2c48dd4559a39d198b6cb020e1cfe2b3dbcdfd67))
+
+### Fix
+
+* fix: limit to polars features compatible with python 3.8 ([`63a4fa6`](https://github.com/kalekundert/macromol_dataframe/commit/63a4fa6d25e6eec455855a6a1bb28c57b642e702))
+
+* fix: ensure that each symmetry mate gets a unique id ([`f53bfbe`](https://github.com/kalekundert/macromol_dataframe/commit/f53bfbea8bd18f8d785a60d97c101fea815c84f6))
+
+
 ## v0.8.1 (2025-02-15)
 
 ### Fix
