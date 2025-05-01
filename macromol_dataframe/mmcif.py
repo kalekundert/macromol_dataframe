@@ -133,7 +133,7 @@ def read_asymmetric_unit(cif_path: Path) -> Atoms:
     struct = read_mmcif(cif_path)
     return struct.asym_atoms
 
-def write_mmcif(cif_path: Path, atoms: Atoms, name: str = None) -> None:
+def write_mmcif(cif_path: Union[str, Path], atoms: Atoms, name: str = None) -> None:
     """
     Write the given atoms to a new mmCIF file.
 
@@ -186,7 +186,7 @@ def write_mmcif(cif_path: Path, atoms: Atoms, name: str = None) -> None:
             'b_factor': 'B_iso_or_equiv',
     }
 
-    block = gemmi.cif.Block(name or cif_path.name.split('.')[0])
+    block = gemmi.cif.Block(name or Path(cif_path).name.split('.')[0])
     loop = block.init_loop('_atom_site.', list(col_map.values()))
 
     # Give each chain a unique name, otherwise symmetry mates will appear to be 
